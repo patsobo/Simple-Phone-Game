@@ -1,0 +1,27 @@
+﻿Build started 6/2/2015 9:03:56 PM.
+     1>Project "C:\Users\patrick\documents\visual studio 2013\Projects\PhoneDirect3DApp2\PhoneDirect3DApp2\PhoneDirect3DApp2.vcxproj" on node 2 (Build target(s)).
+     1>Link:
+         PhoneDirect3DApp2.vcxproj -> C:\Users\patrick\documents\visual studio 2013\Projects\PhoneDirect3DApp2\Debug\PhoneDirect3DApp2\PhoneDirect3DApp2.exe
+       XapPackager:
+         Begin Xap packaging
+         Creating file PhoneDirect3DApp2_Debug_Win32.xap
+         Adding WMAppManifest.xml
+         Adding PhoneDirect3DApp2.exe
+         Adding SimplePixelShader.cso
+         Adding SimpleVertexShader.cso
+         Adding Assets\ApplicationIcon.png
+         Adding Assets\AlignmentGrid.png
+         Adding Assets\ball.dds
+         Adding Assets\paddle.dds
+         Adding Assets\Tiles\FlipCycleTileLarge.png
+         Adding Assets\Tiles\FlipCycleTileMedium.png
+         Adding Assets\Tiles\FlipCycleTileSmall.png
+         Adding Assets\Tiles\IconicTileMediumLarge.png
+         Adding Assets\Tiles\IconicTileSmall.png
+         Adding Assets\deluxe.spritefont
+         Xap packaging completed successfully
+     1>Done Building Project "C:\Users\patrick\documents\visual studio 2013\Projects\PhoneDirect3DApp2\PhoneDirect3DApp2\PhoneDirect3DApp2.vcxproj" (Build target(s)).
+
+Build succeeded.
+
+Time Elapsed 00:00:00.37
