@@ -28,7 +28,7 @@ public:
 	void randomizeEnemies();
 	void resetGame();
 	void setGameRunning(bool gameStarted);
-	bool getGameRunning();
+	bool isGameRunning();
 
 	// Method for updating time-dependent objects.
 	void Update(float timeTotal, float timeDelta);
@@ -36,6 +36,8 @@ public:
 private:
 	bool m_loadingComplete;
 	bool gameStarted;
+
+	wchar_t const* numToWchar_t(int num);
 
 	uint32 m_indexCount;
 

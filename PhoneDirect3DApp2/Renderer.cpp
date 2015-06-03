@@ -13,7 +13,6 @@ m_loadingComplete(false),
 m_indexCount(0)
 {
 	gameStarted = false;
-
 	scale = DisplayProperties::LogicalDpi / 96.0f;
 
 	srand((unsigned)time(0));
@@ -147,6 +146,46 @@ void Renderer::randomizeEnemies()
 	//}
 }
 
+wchar_t const* Renderer::numToWchar_t(int num)
+{
+	switch (num)
+	{
+	case 0:
+		return L"0";
+		break;
+	case 1:
+		return L"1";
+		break;
+	case 2:
+		return L"2";
+		break;
+	case 3:
+		return L"3";
+		break;
+	case 4:
+		return L"4";
+		break;
+	case 5:
+		return L"5";
+		break;
+	case 6:
+		return L"6";
+		break;
+	case 7:
+		return L"7";
+		break;
+	case 8:
+		return L"8";
+		break;
+	case 9:
+		return L"9";
+		break;
+	default:
+		return L"X";
+		break;
+	}
+}
+
 void Renderer::resetGame()
 {
 	gameStarted = false;
@@ -157,7 +196,7 @@ void Renderer::setGameRunning(bool running)
 	gameStarted = running;
 }
 
-bool Renderer::getGameRunning()
+bool Renderer::isGameRunning()
 {
 	return gameStarted;
 }

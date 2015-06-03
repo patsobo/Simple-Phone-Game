@@ -92,7 +92,10 @@ void PhoneDirect3DApp2::OnWindowClosed(CoreWindow^ sender, CoreWindowEventArgs^ 
 
 void PhoneDirect3DApp2::OnPointerPressed(CoreWindow^ sender, PointerEventArgs^ args)
 {
-	// Insert your code here.
+	if (m_renderer->isGameRunning())
+	{
+
+	}
 }
 
 void PhoneDirect3DApp2::OnPointerMoved(CoreWindow^ sender, PointerEventArgs^ args)
@@ -102,7 +105,7 @@ void PhoneDirect3DApp2::OnPointerMoved(CoreWindow^ sender, PointerEventArgs^ arg
 
 void PhoneDirect3DApp2::OnPointerReleased(CoreWindow^ sender, PointerEventArgs^ args)
 {
-	if (m_renderer->getGameRunning() == false)
+	if (!m_renderer->isGameRunning())
 	{
 		m_renderer->setGameRunning(true);
 		m_renderer->randomizeEnemies();
