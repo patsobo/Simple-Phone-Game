@@ -11,6 +11,29 @@ m_Texture(m_Texture), size(size), position(position), movementBounds(movementBou
 	this->movementBounds = movementBounds;
 	this->m_Texture = m_Texture;
 	this->size = size;
+	scale = 1;
+
+	for (int i = 0; i < 5; i++)
+	{
+		this->dividers[i] = 0;
+	}
+
+	animationState = 0;
+	currentFrame = 0;
+	totalFrames = rows*columns;
+	BoundingBox = CreateBoundingBoxFromPosition(Sprite::position);
+	shouldChangeAnimation = false;
+	timeSinceLastFrame = 0;
+}
+
+Sprite::Sprite(ID3D11ShaderResourceView *m_Texture, XMFLOAT2 size, XMFLOAT2 position, Windows::Foundation::Rect* movementBounds, float scale) :
+m_Texture(m_Texture), size(size), position(position), movementBounds(movementBounds), rows(1), columns(1), framesPerSecond(1)
+{
+	this->position = position;
+	this->movementBounds = movementBounds;
+	this->m_Texture = m_Texture;
+	this->size = size;
+	this->scale = scale;
 
 	for (int i = 0; i < 5; i++)
 	{
@@ -33,6 +56,7 @@ Sprite::Sprite(ID3D11ShaderResourceView *m_Texture, XMFLOAT2 size, XMFLOAT2 posi
 	this->rows = rows;
 	this->columns = columns;
 	this->framesPerSecond = framesPerSecond;
+	scale = 1;
 
 	for (int i = 0; i < 5; i++)
 		this->dividers[i] = dividers[i];
@@ -139,8 +163,8 @@ Windows::Foundation::Rect* Sprite::CreateBoundingBoxFromPosition(XMFLOAT2 positi
 	return new Windows::Foundation::Rect(position.x, position.y, getWidth(), getHeight());
 }
 
-float Sprite::getWidth() { return size.x / columns; }
-float Sprite::getHeight() { return size.y / rows; }
+float Sprite::getWidth() { return size.x * scale / columns; }
+float Sprite::getHeight() { return size.y * scale / rows; }
 
 
 

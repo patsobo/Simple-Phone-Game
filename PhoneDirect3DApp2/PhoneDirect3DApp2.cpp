@@ -102,7 +102,14 @@ void PhoneDirect3DApp2::OnPointerMoved(CoreWindow^ sender, PointerEventArgs^ arg
 
 void PhoneDirect3DApp2::OnPointerReleased(CoreWindow^ sender, PointerEventArgs^ args)
 {
-	// Insert your code here.
+	if (m_renderer->getGameRunning() == false)
+	{
+		m_renderer->setGameRunning(true);
+		m_renderer->randomizeEnemies();
+	}
+
+	// For testing purposes
+	OutputDebugString(L"tap");
 }
 
 void PhoneDirect3DApp2::OnActivated(CoreApplicationView^ applicationView, IActivatedEventArgs^ args)

@@ -47,6 +47,8 @@ private:
 	float scale;
 
 	// insert items here
+	ID3D11ShaderResourceView* ballTexture;
+	ID3D11ShaderResourceView* paddleTexture;
 	Sprite* ball;
 	Sprite* paddle1;
 	Sprite* paddle2;

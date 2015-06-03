@@ -22,6 +22,7 @@ class Sprite
 public:
 
 	Sprite(ID3D11ShaderResourceView *m_Texture, XMFLOAT2 size, XMFLOAT2 position, Windows::Foundation::Rect* movementBounds);
+	Sprite(ID3D11ShaderResourceView *m_Texture, XMFLOAT2 size, XMFLOAT2 position, Windows::Foundation::Rect* movementBounds, float scale);
 	Sprite(ID3D11ShaderResourceView *m_Texture, XMFLOAT2 size, XMFLOAT2 position, Windows::Foundation::Rect* movementBounds, int rows, int columns,
 		double framesPerSecond, int dividers[]);
 
@@ -48,6 +49,7 @@ private:
 	int framesPerSecond;
 	int totalFrames;
 	double timeSinceLastFrame;
+	float scale;
 
 	Windows::Foundation::Rect* Sprite::CreateBoundingBoxFromPosition(XMFLOAT2 position);
 	void UpdateAnimation(float timeTotal, float timeDelta);

@@ -33,18 +33,36 @@ void Renderer::CreateWindowSizeDependentResources()
 {
 	Direct3DBase::CreateWindowSizeDependentResources();
 
-	//m_player = new Player(0.0f, 0.0f, &m_windowBounds);
-	//m_player->LoadTexture(m_d3dDevice.Get());
+	// Values to be used for initializing each sprite (made for readability purposes)
+	XMFLOAT2 size;
+	XMFLOAT2 position;
+	float scale;
 
-	//goal = new Goal(&m_windowBounds);
-	//goal->loadTexture(m_d3dDevice.Get());
+	// Create the ball
+	size = XMFLOAT2(500, 500);
+	scale = .05f;
+	position = XMFLOAT2(m_windowBounds.Width / 2 - size.x * scale / 2, m_windowBounds.Height / 2 - size.y * scale / 2);
+	//position = XMFLOAT2(100, 100);
+	CreateDDSTextureFromFile(m_d3dDevice.Get(), L"Assets/ball.dds", nullptr, &ballTexture, MAXSIZE_T);
+	ball = new Sprite(ballTexture, size, position, &m_windowBounds, scale);
+	
+	// Create the paddles
+	CreateDDSTextureFromFile(m_d3dDevice.Get(), L"Assets/paddle.dds", nullptr, &paddleTexture, MAXSIZE_T);
+	size = XMFLOAT2(178, 401);
+	scale = .4f;
+	position = XMFLOAT2(m_windowBounds.Width / 8 - size.x * scale / 2, m_windowBounds.Height / 2 - size.y * scale / 2);
+	paddle1 = new Sprite(paddleTexture, size, position, &m_windowBounds, scale);
+	position.x = m_windowBounds.Width * 7 / 8 - size.x * scale / 2;
+	paddle2 = new Sprite(paddleTexture, size, position, &m_windowBounds, scale);
 }
 
 void Renderer::Update(float timeTotal, float timeDelta)
 {
 	if (gameStarted)
 	{
-		// Add logic
+		ball->Update(timeTotal, timeDelta);
+		paddle1->Update(timeTotal, timeDelta);
+		paddle2->Update(timeTotal, timeDelta);
 	}
 
 	// insert reset game logic
@@ -74,6 +92,9 @@ void Renderer::Render()
 	m_spriteBatch->Begin();
 
 	// Insert objects here
+	ball->Draw(m_spriteBatch.get());
+	paddle1->Draw(m_spriteBatch.get());
+	paddle2->Draw(m_spriteBatch.get());
 
 	float* stringlength = m_spriteFont->MeasureString(L"Tap to start!").m128_f32;
 
