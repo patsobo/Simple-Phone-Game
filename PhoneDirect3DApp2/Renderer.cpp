@@ -14,7 +14,7 @@ m_indexCount(0)
 {
 	gameStarted = false;
 	scale = DisplayProperties::LogicalDpi / 96.0f;
-
+	score = 0;
 	srand((unsigned)time(0));
 }
 
@@ -91,14 +91,20 @@ void Renderer::Render()
 	m_spriteBatch->Begin();
 
 	// Insert objects here
-	ball->Draw(m_spriteBatch.get());
-	paddle1->Draw(m_spriteBatch.get());
-	paddle2->Draw(m_spriteBatch.get());
-
-	float* stringlength = m_spriteFont->MeasureString(L"Tap to start!").m128_f32;
-
-	if (!gameStarted)
+	if (gameStarted)
 	{
+		ball->Draw(m_spriteBatch.get());
+		paddle1->Draw(m_spriteBatch.get());
+		paddle2->Draw(m_spriteBatch.get());
+
+		// draw score
+		displayScore(score);
+	}
+
+	else if (!gameStarted)
+	{
+		float* stringlength = m_spriteFont->MeasureString(L"Tap to start!").m128_f32;
+
 		m_spriteFont->DrawString(m_spriteBatch.get(), L"Tap to start!",
 			XMFLOAT2(m_windowBounds.Width * scale / 2.0f, m_windowBounds.Height * scale / (5.0f / 2.0f)),
 			Colors::Black, 0.0f, XMFLOAT2(*stringlength / 2.0f, 0.0f), 1.0f, DirectX::SpriteEffects_None, 0.0f);
@@ -146,6 +152,40 @@ void Renderer::randomizeEnemies()
 	//}
 }
 
+void Renderer::displayScore(int myScore)
+{
+	int numDigits = getNumDigits(myScore);
+	wchar_t const* num;
+	float* stringlength;
+	float tempScore;
+	XMFLOAT2 position = XMFLOAT2(m_windowBounds.Width - m_windowBounds.Width * scale / 20.0f, m_windowBounds.Height * scale / 20.0f);
+	for (int i = 0; i < numDigits; i++)
+	{
+		tempScore = myScore % 10;
+		num = numToWchar_t(tempScore);
+		stringlength = m_spriteFont->MeasureString(num).m128_f32;
+
+		m_spriteFont->DrawString(m_spriteBatch.get(), num, position,
+			Colors::Black, 0.0f, XMFLOAT2(*stringlength / 2.0f, 0.0f), 1.0f, DirectX::SpriteEffects_None, 0.0f);
+		position.x -= *stringlength;
+
+		myScore /= 10;
+	}
+
+}
+
+int Renderer::getNumDigits(int num)
+{
+	int counter = 0;
+	if (num < 0) counter = 1; // remove this line if '-' counts as a digit
+	while (num)
+	{
+		num /= 10;
+		counter++;
+	}
+	return counter;
+}
+
 wchar_t const* Renderer::numToWchar_t(int num)
 {
 	switch (num)
@@ -184,6 +224,11 @@ wchar_t const* Renderer::numToWchar_t(int num)
 		return L"X";
 		break;
 	}
+}
+
+void Renderer::addToScore(int val)
+{
+	score += val;
 }
 
 void Renderer::resetGame()

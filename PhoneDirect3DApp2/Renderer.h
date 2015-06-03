@@ -29,6 +29,7 @@ public:
 	void resetGame();
 	void setGameRunning(bool gameStarted);
 	bool isGameRunning();
+	void addToScore(int val);
 
 	// Method for updating time-dependent objects.
 	void Update(float timeTotal, float timeDelta);
@@ -36,7 +37,9 @@ public:
 private:
 	bool m_loadingComplete;
 	bool gameStarted;
-
+	int score;
+	void displayScore(int myScore);
+	int getNumDigits(int num);
 	wchar_t const* numToWchar_t(int num);
 
 	uint32 m_indexCount;

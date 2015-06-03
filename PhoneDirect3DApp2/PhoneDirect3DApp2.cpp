@@ -94,7 +94,7 @@ void PhoneDirect3DApp2::OnPointerPressed(CoreWindow^ sender, PointerEventArgs^ a
 {
 	if (m_renderer->isGameRunning())
 	{
-
+		m_renderer->addToScore(1);
 	}
 }
 
