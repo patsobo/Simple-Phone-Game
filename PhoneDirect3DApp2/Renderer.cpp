@@ -39,22 +39,26 @@ void Renderer::CreateWindowSizeDependentResources()
 	float speed;
 
 	// Create the ball
-	size = XMFLOAT2(500, 500);
+	size = BALL_DIM;
 	scale = .05f;
 	position = XMFLOAT2(m_windowBounds.Width / 2 - size.x * scale / 2, m_windowBounds.Height / 2 - size.y * scale / 2);
-	speed = 100;
+	speed = 200;
 	//position = XMFLOAT2(100, 100);
 	CreateDDSTextureFromFile(m_d3dDevice.Get(), L"Assets/ball.dds", nullptr, &ballTexture, MAXSIZE_T);
 	ball = new Sprite(ballTexture, size, position, &m_windowBounds, scale, speed);
 	
 	// Create the paddles
 	CreateDDSTextureFromFile(m_d3dDevice.Get(), L"Assets/paddle.dds", nullptr, &paddleTexture, MAXSIZE_T);
-	size = XMFLOAT2(178, 401);
+	size = PADDLE_DIM;
 	scale = .4f;
-	position = XMFLOAT2(m_windowBounds.Width / 8 - size.x * scale / 2, m_windowBounds.Height / 2 - size.y * scale / 2);
-	paddle1 = new Sprite(paddleTexture, size, position, &m_windowBounds, scale);
-	position.x = m_windowBounds.Width * 7 / 8 - size.x * scale / 2;
-	paddle2 = new Sprite(paddleTexture, size, position, &m_windowBounds, scale);
+	speed = 100;
+	paddleBounds = m_windowBounds;
+	paddleBounds.X = m_windowBounds.Width / 15;
+	paddleBounds.Width = m_windowBounds.Width - paddleBounds.X*2;
+	position = XMFLOAT2(paddleBounds.X, m_windowBounds.Height / 2 - size.y * scale / 2);
+	paddle1 = new Sprite(paddleTexture, size, position, &paddleBounds, scale, speed);
+	position.x = paddleBounds.X + paddleBounds.Width - size.x * scale;
+	paddle2 = new Sprite(paddleTexture, size, position, &paddleBounds, scale, speed);
 }
 
 void Renderer::Update(float timeTotal, float timeDelta)
@@ -67,7 +71,18 @@ void Renderer::Update(float timeTotal, float timeDelta)
 
 		// Reverse direction if ball hits a paddle
 		if (ball->CollidesWith(paddle1) || ball->CollidesWith(paddle2))
-			ball->setVelocity(XMFLOAT2(-1 * ball->getVelocity().x, -1 * ball->getVelocity().y));
+		{
+			if (ball->CollidesWith(paddle1) && ball->CollidesWith(paddle2))
+			{
+				paddle1->setVelocity(XMFLOAT2(0, 0));
+				paddle2->setVelocity(XMFLOAT2(0, 0));
+			}
+			else
+			{
+				ball->setVelocity(XMFLOAT2(-1 * ball->getVelocity().x, -1 * ball->getVelocity().y));
+				addToScore(1);
+			}
+		}
 	}
 
 	// insert reset game logic
@@ -156,6 +171,18 @@ void Renderer::randomizeEnemies()
 	//		positionsOverlap = false;
 	//	}
 	//}
+}
+
+void Renderer::movePaddles()
+{
+	paddle1->setVelocity(XMFLOAT2(1, 0));
+	paddle2->setVelocity(XMFLOAT2(-1, 0));
+}
+
+void Renderer::resetPaddles()
+{
+	paddle1->setVelocity(XMFLOAT2(-1, 0));
+	paddle2->setVelocity(XMFLOAT2(1, 0));
 }
 
 void Renderer::displayScore(int myScore)

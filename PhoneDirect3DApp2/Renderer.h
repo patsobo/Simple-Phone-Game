@@ -15,6 +15,9 @@ using namespace DirectX;
 using namespace Windows::Devices::Sensors;
 using namespace std;
 
+const XMFLOAT2 PADDLE_DIM = XMFLOAT2(178, 401);
+const XMFLOAT2 BALL_DIM = XMFLOAT2(500, 500);
+
 ref class Renderer sealed : public Direct3DBase
 {
 public:
@@ -30,6 +33,8 @@ public:
 	void setGameRunning(bool gameStarted);
 	bool isGameRunning();
 	void addToScore(int val);
+	void movePaddles();
+	void resetPaddles();
 
 	// Method for updating time-dependent objects.
 	void Update(float timeTotal, float timeDelta);
@@ -57,6 +62,7 @@ private:
 	Sprite* ball;
 	Sprite* paddle1;
 	Sprite* paddle2;
+	Windows::Foundation::Rect paddleBounds;
 
 	unique_ptr<SpriteFont> m_spriteFont;
 };

@@ -94,7 +94,8 @@ void PhoneDirect3DApp2::OnPointerPressed(CoreWindow^ sender, PointerEventArgs^ a
 {
 	if (m_renderer->isGameRunning())
 	{
-		m_renderer->addToScore(1);
+		m_renderer->movePaddles();
+		//m_renderer->addToScore(1);
 	}
 }
 
@@ -109,6 +110,10 @@ void PhoneDirect3DApp2::OnPointerReleased(CoreWindow^ sender, PointerEventArgs^ 
 	{
 		m_renderer->setGameRunning(true);
 		m_renderer->randomizeEnemies();
+	}
+	else
+	{
+		m_renderer->resetPaddles();
 	}
 
 	// For testing purposes
