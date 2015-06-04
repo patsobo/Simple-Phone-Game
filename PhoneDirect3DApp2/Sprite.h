@@ -30,10 +30,13 @@ public:
 	void Draw(SpriteBatch* spriteBatch);
 	virtual void Update(float timeTotal, float timeDelta);
 
+	bool CollidesWith(Sprite* that);
+
 	float getWidth();
 	float getHeight();
 	XMFLOAT2 getVelocity();
 	void setVelocity(XMFLOAT2 newVelocity);
+	Windows::Foundation::Rect* getBoundingBox();
 
 private:
 	XMFLOAT2 Velocity;

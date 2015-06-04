@@ -64,6 +64,10 @@ void Renderer::Update(float timeTotal, float timeDelta)
 		ball->Update(timeTotal, timeDelta);
 		paddle1->Update(timeTotal, timeDelta);
 		paddle2->Update(timeTotal, timeDelta);
+
+		// Reverse direction if ball hits a paddle
+		if (ball->CollidesWith(paddle1) || ball->CollidesWith(paddle2))
+			ball->setVelocity(XMFLOAT2(-1 * ball->getVelocity().x, -1 * ball->getVelocity().y));
 	}
 
 	// insert reset game logic

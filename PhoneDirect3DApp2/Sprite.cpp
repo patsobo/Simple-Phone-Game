@@ -101,8 +101,11 @@ void Sprite::Update(float timeTotal, float timeDelta)
 	newPosition.y = position.y + ((Velocity.y * timeDelta) * Speed);
 
 	if (Blocked(newPosition))
+	{
+		BoundingBox = CreateBoundingBoxFromPosition(position);
 		return;
-
+	}
+	BoundingBox = CreateBoundingBoxFromPosition(newPosition);
 	position = newPosition;
 }
 
@@ -169,6 +172,13 @@ Windows::Foundation::Rect* Sprite::CreateBoundingBoxFromPosition(XMFLOAT2 positi
 	return new Windows::Foundation::Rect(position.x, position.y, getWidth(), getHeight());
 }
 
+bool Sprite::CollidesWith(Sprite* that)
+{
+	if (this->BoundingBox->IntersectsWith(*that->getBoundingBox()))
+		return true;
+	return false;
+}
+
 void Sprite::NormalizeVelocity()
 {
 	if (Velocity.x == 0 && Velocity.y == 0)
@@ -186,6 +196,7 @@ void Sprite::setVelocity(XMFLOAT2 newVelocity)
 	Velocity = newVelocity;
 	NormalizeVelocity();
 }
+Windows::Foundation::Rect* Sprite::getBoundingBox(){ return BoundingBox; }
 
 
 
