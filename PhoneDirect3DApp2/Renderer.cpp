@@ -36,14 +36,16 @@ void Renderer::CreateWindowSizeDependentResources()
 	XMFLOAT2 size;
 	XMFLOAT2 position;
 	float scale;
+	float speed;
 
 	// Create the ball
 	size = XMFLOAT2(500, 500);
 	scale = .05f;
 	position = XMFLOAT2(m_windowBounds.Width / 2 - size.x * scale / 2, m_windowBounds.Height / 2 - size.y * scale / 2);
+	speed = 100;
 	//position = XMFLOAT2(100, 100);
 	CreateDDSTextureFromFile(m_d3dDevice.Get(), L"Assets/ball.dds", nullptr, &ballTexture, MAXSIZE_T);
-	ball = new Sprite(ballTexture, size, position, &m_windowBounds, scale);
+	ball = new Sprite(ballTexture, size, position, &m_windowBounds, scale, speed);
 	
 	// Create the paddles
 	CreateDDSTextureFromFile(m_d3dDevice.Get(), L"Assets/paddle.dds", nullptr, &paddleTexture, MAXSIZE_T);
@@ -239,6 +241,7 @@ void Renderer::resetGame()
 void Renderer::setGameRunning(bool running)
 {
 	gameStarted = running;
+	ball->setVelocity(XMFLOAT2(1, 0));
 }
 
 bool Renderer::isGameRunning()

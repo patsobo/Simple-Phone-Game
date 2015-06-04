@@ -4,36 +4,14 @@
 using namespace DirectX;
 using namespace std;
 
-Sprite::Sprite(ID3D11ShaderResourceView *m_Texture, XMFLOAT2 size, XMFLOAT2 position, Windows::Foundation::Rect* movementBounds) :
-m_Texture(m_Texture), size(size), position(position), movementBounds(movementBounds), rows(1), columns(1), framesPerSecond(1)
+Sprite::Sprite(ID3D11ShaderResourceView *m_Texture, XMFLOAT2 size, XMFLOAT2 position, Windows::Foundation::Rect* movementBounds, float scale, float Speed) :
+m_Texture(m_Texture), size(size), position(position), movementBounds(movementBounds), rows(1), columns(1), framesPerSecond(1), Velocity(XMFLOAT2(0, 0))
 {
 	this->position = position;
 	this->movementBounds = movementBounds;
 	this->m_Texture = m_Texture;
-	this->size = size;
-	scale = 1;
-
-	for (int i = 0; i < 5; i++)
-	{
-		this->dividers[i] = 0;
-	}
-
-	animationState = 0;
-	currentFrame = 0;
-	totalFrames = rows*columns;
-	BoundingBox = CreateBoundingBoxFromPosition(Sprite::position);
-	shouldChangeAnimation = false;
-	timeSinceLastFrame = 0;
-}
-
-Sprite::Sprite(ID3D11ShaderResourceView *m_Texture, XMFLOAT2 size, XMFLOAT2 position, Windows::Foundation::Rect* movementBounds, float scale) :
-m_Texture(m_Texture), size(size), position(position), movementBounds(movementBounds), rows(1), columns(1), framesPerSecond(1)
-{
-	this->position = position;
-	this->movementBounds = movementBounds;
-	this->m_Texture = m_Texture;
-	this->size = size;
 	this->scale = scale;
+	this->Speed = Speed;
 
 	for (int i = 0; i < 5; i++)
 	{
@@ -47,6 +25,28 @@ m_Texture(m_Texture), size(size), position(position), movementBounds(movementBou
 	shouldChangeAnimation = false;
 	timeSinceLastFrame = 0;
 }
+
+//Sprite::Sprite(ID3D11ShaderResourceView *m_Texture, XMFLOAT2 size, XMFLOAT2 position, Windows::Foundation::Rect* movementBounds, float scale) :
+//m_Texture(m_Texture), size(size), position(position), movementBounds(movementBounds), rows(1), columns(1), framesPerSecond(1)
+//{
+//	this->position = position;
+//	this->movementBounds = movementBounds;
+//	this->m_Texture = m_Texture;
+//	this->size = size;
+//	this->scale = scale;
+//
+//	for (int i = 0; i < 5; i++)
+//	{
+//		this->dividers[i] = 0;
+//	}
+//
+//	animationState = 0;
+//	currentFrame = 0;
+//	totalFrames = rows*columns;
+//	BoundingBox = CreateBoundingBoxFromPosition(Sprite::position);
+//	shouldChangeAnimation = false;
+//	timeSinceLastFrame = 0;
+//}
 
 Sprite::Sprite(ID3D11ShaderResourceView *m_Texture, XMFLOAT2 size, XMFLOAT2 position, Windows::Foundation::Rect* movementBounds, int rows, int columns,
 	double framesPerSecond, int dividers[])
@@ -153,9 +153,15 @@ double Sprite::SecondsBetweenFrames()
 
 bool Sprite::Blocked(XMFLOAT2 newPosition)
 {
-	Windows::Foundation::Rect* boundingBox = CreateBoundingBoxFromPosition(newPosition);
+	BoundingBox = CreateBoundingBoxFromPosition(newPosition);
 
-	return !movementBounds->IntersectsWith(*boundingBox);
+	Windows::Foundation::Point topLeft(BoundingBox->X, BoundingBox->Y);
+	Windows::Foundation::Point topRight(BoundingBox->X + getWidth(), BoundingBox->Y);
+	Windows::Foundation::Point bottomLeft(BoundingBox->X, BoundingBox->Y + getHeight());
+	Windows::Foundation::Point bottomRight(BoundingBox->X + getWidth(), BoundingBox->Y + getHeight());
+
+	return !((movementBounds->Contains(topLeft)) && (movementBounds->Contains(topRight)) && (movementBounds->Contains(bottomLeft)) &&
+		(movementBounds->Contains(bottomRight)));
 }
 
 Windows::Foundation::Rect* Sprite::CreateBoundingBoxFromPosition(XMFLOAT2 position)
@@ -163,9 +169,23 @@ Windows::Foundation::Rect* Sprite::CreateBoundingBoxFromPosition(XMFLOAT2 positi
 	return new Windows::Foundation::Rect(position.x, position.y, getWidth(), getHeight());
 }
 
+void Sprite::NormalizeVelocity()
+{
+	if (Velocity.x == 0 && Velocity.y == 0)
+		return;
+	float magnitude = sqrt(pow(Velocity.x, 2) + pow(Velocity.y, 2));
+	Velocity.x /= magnitude;
+	Velocity.y /= magnitude;
+}
+
 float Sprite::getWidth() { return size.x * scale / columns; }
 float Sprite::getHeight() { return size.y * scale / rows; }
-
+XMFLOAT2 Sprite::getVelocity() { return Velocity; }
+void Sprite::setVelocity(XMFLOAT2 newVelocity)
+{
+	Velocity = newVelocity;
+	NormalizeVelocity();
+}
 
 
 
