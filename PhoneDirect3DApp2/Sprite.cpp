@@ -12,6 +12,7 @@ m_Texture(m_Texture), size(size), position(position), movementBounds(movementBou
 	this->m_Texture = m_Texture;
 	this->scale = scale;
 	this->Speed = Speed;
+	this->initialPosition = position;
 
 	for (int i = 0; i < 5; i++)
 	{
@@ -149,10 +150,12 @@ void Sprite::UpdateAnimation(float timeTotal, float timeDelta)
 	}
 }
 
-double Sprite::SecondsBetweenFrames()
-{
-	return 1.0 / framesPerSecond;
+void Sprite::reset() {
+	position = initialPosition;
+	Velocity = XMFLOAT2(0, 0);
 }
+
+double Sprite::SecondsBetweenFrames() {	return 1.0 / framesPerSecond; }
 
 bool Sprite::Blocked(XMFLOAT2 newPosition)
 {

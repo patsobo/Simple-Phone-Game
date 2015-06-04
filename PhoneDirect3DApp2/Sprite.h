@@ -37,6 +37,7 @@ public:
 	XMFLOAT2 getVelocity();
 	void setVelocity(XMFLOAT2 newVelocity);
 	Windows::Foundation::Rect* getBoundingBox();
+	void reset();
 
 private:
 	XMFLOAT2 Velocity;
@@ -52,6 +53,7 @@ private:
 
 	Windows::Foundation::Rect* movementBounds;
 	Windows::Foundation::Rect* BoundingBox;
+	XMFLOAT2 initialPosition;	// For resetting
 	XMFLOAT2 position;
 	XMFLOAT2 size;
 

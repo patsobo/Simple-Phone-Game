@@ -15,6 +15,7 @@ m_indexCount(0)
 	gameStarted = false;
 	scale = DisplayProperties::LogicalDpi / 96.0f;
 	score = 0;
+	highScore = 0; // To be replaced with memory call
 	srand((unsigned)time(0));
 }
 
@@ -85,7 +86,7 @@ void Renderer::Update(float timeTotal, float timeDelta)
 			{
 				ball->setVelocity(XMFLOAT2(-1, 0));
 			}
-			addToScore(1);
+			addToScore(8);
 		}
 	}
 
@@ -121,9 +122,7 @@ void Renderer::Render()
 		ball->Draw(m_spriteBatch.get());
 		paddle1->Draw(m_spriteBatch.get());
 		paddle2->Draw(m_spriteBatch.get());
-
-		// draw score
-		displayScore(score);
+		displayScores();
 	}
 
 	else if (!gameStarted)
@@ -189,13 +188,26 @@ void Renderer::resetPaddles()
 	paddle2->setVelocity(XMFLOAT2(1, 0));
 }
 
-void Renderer::displayScore(int myScore)
+void Renderer::displayScores()
+{
+	if (score > highScore)
+		highScore = score;
+
+	float* digitLength = m_spriteFont->MeasureString(L"0").m128_f32;
+	XMFLOAT2 position = XMFLOAT2(m_windowBounds.Width - m_windowBounds.Width * scale / 20.0f, m_windowBounds.Height * scale / 20.0f);
+	displayNum(score, position);
+	position.x = 0;
+	for (int i = 0; i < getNumDigits(highScore); i++)
+		position.x += *digitLength;
+	displayNum(highScore, position);
+}
+
+void Renderer::displayNum(int myScore, XMFLOAT2 position)
 {
 	int numDigits = getNumDigits(myScore);
 	wchar_t const* num;
 	float* stringlength;
 	float tempScore;
-	XMFLOAT2 position = XMFLOAT2(m_windowBounds.Width - m_windowBounds.Width * scale / 20.0f, m_windowBounds.Height * scale / 20.0f);
 	for (int i = 0; i < numDigits; i++)
 	{
 		tempScore = myScore % 10;
@@ -213,6 +225,7 @@ void Renderer::displayScore(int myScore)
 
 int Renderer::getNumDigits(int num)
 {
+	if (num == 0) return 1;
 	int counter = 0;
 	if (num < 0) counter = 1; // remove this line if '-' counts as a digit
 	while (num)
@@ -270,6 +283,13 @@ void Renderer::addToScore(int val)
 
 void Renderer::resetGame()
 {
+	if (score > highScore)
+		highScore = score;
+	score = 0;
+	ball->reset();
+	paddle1->reset();
+	paddle2->reset();
+	
 	gameStarted = false;
 }
 

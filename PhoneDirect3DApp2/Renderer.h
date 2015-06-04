@@ -42,8 +42,10 @@ public:
 private:
 	bool m_loadingComplete;
 	bool gameStarted;
+	int highScore;
 	int score;
-	void displayScore(int myScore);
+	void displayScores();
+	void displayNum(int myScore, XMFLOAT2 position);
 	int getNumDigits(int num);
 	wchar_t const* numToWchar_t(int num);
 

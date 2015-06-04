@@ -1,11 +1,11 @@
-﻿Build started 6/4/2015 4:28:34 PM.
+﻿Build started 6/4/2015 5:09:30 PM.
      1>Project "C:\Users\patrick\documents\visual studio 2013\Projects\PhoneDirect3DApp2\PhoneDirect3DApp2\PhoneDirect3DApp2.vcxproj" on node 2 (Build target(s)).
      1>ClCompile:
          C:\Program Files (x86)\Microsoft Visual Studio 11.0\VC\WPSDK\WP80\bin\CL.exe /c /IC:\Users\patrick\Documents\DirectXTK\Inc /I"C:\Users\patrick\documents\visual studio 2013\Projects\PhoneDirect3DApp2\PhoneDirect3DApp2\\" /IDebug\ /I"C:\Users\patrick\documents\visual studio 2013\Projects\PhoneDirect3DApp2\PhoneDirect3DApp2\\" /I"Generated Files\\" /IDebug\ /ZI /ZW /ZW:nostdlib /nologo /W3 /WX- /sdl /MP /Od /Oy- /D PSAPI_VERSION=2 /D _UNICODE /D UNICODE /D _DEBUG /D WINAPI_FAMILY=WINAPI_FAMILY_PHONE_APP /Gm- /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Yu"pch.h" /Fp"Debug\PhoneDirect3DApp2.pch" /Fo"Debug\\" /Fd"Debug\vc110.pdb" /Gd /TP /FU"C:\Program Files (x86)\Microsoft Visual Studio 11.0\VC\WPSDK\WP80\lib\platform.winmd" /FU"C:\Program Files (x86)\Windows Phone Kits\8.0\Windows Metadata\Windows.winmd" /analyze- /errorReport:prompt Renderer.cpp
          Renderer.cpp
-     1>c:\users\patrick\documents\visual studio 2013\projects\phonedirect3dapp2\phonedirect3dapp2\renderer.cpp(94): warning C4305: 'initializing' : truncation from 'double' to 'const float'
-     1>c:\users\patrick\documents\visual studio 2013\projects\phonedirect3dapp2\phonedirect3dapp2\renderer.cpp(198): warning C4244: '=' : conversion from 'int' to 'float', possible loss of data
-     1>c:\users\patrick\documents\visual studio 2013\projects\phonedirect3dapp2\phonedirect3dapp2\renderer.cpp(199): warning C4244: 'argument' : conversion from 'float' to 'int', possible loss of data
+     1>c:\users\patrick\documents\visual studio 2013\projects\phonedirect3dapp2\phonedirect3dapp2\renderer.cpp(98): warning C4305: 'initializing' : truncation from 'double' to 'const float'
+     1>c:\users\patrick\documents\visual studio 2013\projects\phonedirect3dapp2\phonedirect3dapp2\renderer.cpp(213): warning C4244: '=' : conversion from 'int' to 'float', possible loss of data
+     1>c:\users\patrick\documents\visual studio 2013\projects\phonedirect3dapp2\phonedirect3dapp2\renderer.cpp(214): warning C4244: 'argument' : conversion from 'float' to 'int', possible loss of data
        Link:
          C:\Program Files (x86)\Microsoft Visual Studio 11.0\VC\WPSDK\WP80\bin\link.exe /ERRORREPORT:PROMPT /OUT:"C:\Users\patrick\documents\visual studio 2013\Projects\PhoneDirect3DApp2\Debug\PhoneDirect3DApp2\PhoneDirect3DApp2.exe" /INCREMENTAL /NOLOGO d3d11.lib WindowsPhoneCore.lib RuntimeObject.lib PhoneAppModelHost.lib /NODEFAULTLIB:ole32.lib /MANIFEST:NO /DEBUG /PDB:"C:\Users\patrick\documents\visual studio 2013\Projects\PhoneDirect3DApp2\Debug\PhoneDirect3DApp2\PhoneDirect3DApp2.pdb" /SUBSYSTEM:WINDOWS /TLBID:1 /WINMD:NO /WINMDFILE:"C:\Users\patrick\documents\visual studio 2013\Projects\PhoneDirect3DApp2\Debug\PhoneDirect3DApp2\PhoneDirect3DApp2.winmd" /DYNAMICBASE /NXCOMPAT /MACHINE:X86 Debug\PhoneDirect3DApp2.obj
          Debug\Renderer.obj
@@ -36,4 +36,4 @@
 
 Build succeeded.
 
-Time Elapsed 00:00:02.47
+Time Elapsed 00:00:02.75
