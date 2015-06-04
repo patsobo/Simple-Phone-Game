@@ -74,14 +74,18 @@ void Renderer::Update(float timeTotal, float timeDelta)
 		{
 			if (ball->CollidesWith(paddle1) && ball->CollidesWith(paddle2))
 			{
-				paddle1->setVelocity(XMFLOAT2(0, 0));
-				paddle2->setVelocity(XMFLOAT2(0, 0));
+				resetGame();
+				return;
+			}
+			else if (ball->CollidesWith(paddle1))
+			{
+				ball->setVelocity(XMFLOAT2(1, 0));
 			}
 			else
 			{
-				ball->setVelocity(XMFLOAT2(-1 * ball->getVelocity().x, -1 * ball->getVelocity().y));
-				addToScore(1);
+				ball->setVelocity(XMFLOAT2(-1, 0));
 			}
+			addToScore(1);
 		}
 	}
 
