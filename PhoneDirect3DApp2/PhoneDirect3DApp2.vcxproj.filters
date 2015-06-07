@@ -53,14 +53,13 @@
     <ClInclude Include="BasicTimer.h" />
     <ClInclude Include="pch.h" />
     <ClInclude Include="Renderer.h" />
-    <ClInclude Include="Sprite.h" />
-  </ItemGroup>
-  <ItemGroup>
-    <Xml Include="WMAppManifest.xml" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\deluxe.spritefont">
       <Filter>Assets</Filter>
     </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Xml Include="WMAppManifest.xml" />
   </ItemGroup>
 </Project>

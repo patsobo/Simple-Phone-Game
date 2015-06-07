@@ -33,6 +33,9 @@ void Renderer::CreateWindowSizeDependentResources()
 {
 	Direct3DBase::CreateWindowSizeDependentResources();
 
+	m_windowBounds.Height *= scale;
+	m_windowBounds.Width *= scale;
+
 	// Values to be used for initializing each sprite (made for readability purposes)
 	XMFLOAT2 size;
 	XMFLOAT2 position;
@@ -42,7 +45,7 @@ void Renderer::CreateWindowSizeDependentResources()
 	// Create the ball
 	size = BALL_DIM;
 	scale = .05f;
-	position = XMFLOAT2(m_windowBounds.Width / 2 - size.x * scale / 2, m_windowBounds.Height / 2 - size.y * scale / 2);
+	position = XMFLOAT2(m_windowBounds.Width  / 2 - size.x * scale / 2, m_windowBounds.Height / 2 - size.y * scale / 2);
 	speed = 200;
 	//position = XMFLOAT2(100, 100);
 	CreateDDSTextureFromFile(m_d3dDevice.Get(), L"Assets/ball.dds", nullptr, &ballTexture, MAXSIZE_T);
@@ -78,18 +81,33 @@ void Renderer::Update(float timeTotal, float timeDelta)
 				resetGame();
 				return;
 			}
-			else if (ball->CollidesWith(paddle1))
+			if (ball->CollidesWith(paddle1))
 			{
 				while (ball->CollidesWith(paddle1))
+				{
 					ball->adjustPosition();
+					if (ball->CollidesWith(paddle1) && ball->CollidesWith(paddle2))
+					{
+						resetGame();
+						return;
+					}
+				}
 				ball->setVelocity(XMFLOAT2(1, 0));
 			}
 			else
 			{
 				while (ball->CollidesWith(paddle2))
+				{
 					ball->adjustPosition();
+					if (ball->CollidesWith(paddle1) && ball->CollidesWith(paddle2))
+					{
+						resetGame();
+						return;
+					}
+				}
 				ball->setVelocity(XMFLOAT2(-1, 0));
 			}
+			ball->adjustPosition();	// Correction for minor collision
 			addToScore(1);
 		}
 	}
@@ -131,10 +149,10 @@ void Renderer::Render()
 
 	else if (!gameStarted)
 	{
-		float* stringlength = m_spriteFont->MeasureString(L"Tap to start!").m128_f32;
+		float* stringlength = m_spriteFont->MeasureString(L"Tap to start!").n128_f32;
 
 		m_spriteFont->DrawString(m_spriteBatch.get(), L"Tap to start!",
-			XMFLOAT2(m_windowBounds.Width * scale / 2.0f, m_windowBounds.Height * scale / (5.0f / 2.0f)),
+			XMFLOAT2(m_windowBounds.Width / 2.0f, m_windowBounds.Height / (5.0f / 2.0f)),
 			Colors::Black, 0.0f, XMFLOAT2(*stringlength / 2.0f, 0.0f), 1.0f, DirectX::SpriteEffects_None, 0.0f);
 	}
 
@@ -197,8 +215,8 @@ void Renderer::displayScores()
 	if (score > highScore)
 		highScore = score;
 
-	float* digitLength = m_spriteFont->MeasureString(L"0").m128_f32;
-	XMFLOAT2 position = XMFLOAT2(m_windowBounds.Width - m_windowBounds.Width * scale / 20.0f, m_windowBounds.Height * scale / 20.0f);
+	float* digitLength = m_spriteFont->MeasureString(L"0").n128_f32;
+	XMFLOAT2 position = XMFLOAT2(m_windowBounds.Width - m_windowBounds.Width / 20.0f, m_windowBounds.Height / 20.0f);
 	displayNum(score, position);
 	position.x = 0;
 	for (int i = 0; i < getNumDigits(highScore); i++)
@@ -216,7 +234,7 @@ void Renderer::displayNum(int myScore, XMFLOAT2 position)
 	{
 		tempScore = myScore % 10;
 		num = numToWchar_t(tempScore);
-		stringlength = m_spriteFont->MeasureString(num).m128_f32;
+		stringlength = m_spriteFont->MeasureString(num).n128_f32;
 
 		m_spriteFont->DrawString(m_spriteBatch.get(), num, position,
 			Colors::Black, 0.0f, XMFLOAT2(*stringlength / 2.0f, 0.0f), 1.0f, DirectX::SpriteEffects_None, 0.0f);
