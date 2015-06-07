@@ -191,6 +191,14 @@ void Sprite::NormalizeVelocity()
 	Velocity.y /= magnitude;
 }
 
+void Sprite::adjustPosition()
+{
+	XMFLOAT2 adjustVelocity = XMFLOAT2(-1 * Velocity.x, -1 * Velocity.y);
+	position.x += adjustVelocity.x * POS_ADJUST;
+	position.y += adjustVelocity.y * POS_ADJUST;
+	BoundingBox = CreateBoundingBoxFromPosition(position);
+}
+
 float Sprite::getWidth() { return size.x * scale / columns; }
 float Sprite::getHeight() { return size.y * scale / rows; }
 XMFLOAT2 Sprite::getVelocity() { return Velocity; }

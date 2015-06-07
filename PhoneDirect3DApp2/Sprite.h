@@ -17,6 +17,9 @@ of the sprite.  Furthermore, this class works under the assumption that the new 
 the sprite will never switch to a different animation cycle automatically - it has to be triggered using the aforementioned variables.
 Therefore, if you want an animation cycle to only run once, use the animationPlayedOnce variable to know when to change the loop back to something else.
 */
+
+const int POS_ADJUST = 1;
+
 class Sprite
 {
 public:
@@ -38,6 +41,7 @@ public:
 	void setVelocity(XMFLOAT2 newVelocity);
 	Windows::Foundation::Rect* getBoundingBox();
 	void reset();
+	void adjustPosition();
 
 private:
 	XMFLOAT2 Velocity;

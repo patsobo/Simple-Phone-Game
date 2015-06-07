@@ -80,13 +80,17 @@ void Renderer::Update(float timeTotal, float timeDelta)
 			}
 			else if (ball->CollidesWith(paddle1))
 			{
+				while (ball->CollidesWith(paddle1))
+					ball->adjustPosition();
 				ball->setVelocity(XMFLOAT2(1, 0));
 			}
 			else
 			{
+				while (ball->CollidesWith(paddle2))
+					ball->adjustPosition();
 				ball->setVelocity(XMFLOAT2(-1, 0));
 			}
-			addToScore(8);
+			addToScore(1);
 		}
 	}
 
