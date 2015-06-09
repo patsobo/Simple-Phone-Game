@@ -131,6 +131,7 @@
     <Image Include="Assets\Tiles\IconicTileSmall.png" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Countdown.h" />
     <ClInclude Include="PhoneDirect3DApp2.h" />
     <ClInclude Include="Renderer.h" />
     <ClInclude Include="DirectXHelper.h" />
@@ -139,6 +140,7 @@
     <ClInclude Include="pch.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Countdown.cpp" />
     <ClCompile Include="PhoneDirect3DApp2.cpp" />
     <ClCompile Include="Renderer.cpp" />
     <ClCompile Include="Direct3DBase.cpp" />

@@ -46,7 +46,7 @@ void Renderer::CreateWindowSizeDependentResources()
 	size = BALL_DIM;
 	scale = .05f;
 	position = XMFLOAT2(m_windowBounds.Width  / 2 - size.x * scale / 2, m_windowBounds.Height / 2 - size.y * scale / 2);
-	speed = 200;
+	speed = 500;
 	//position = XMFLOAT2(100, 100);
 	CreateDDSTextureFromFile(m_d3dDevice.Get(), L"Assets/ball.dds", nullptr, &ballTexture, MAXSIZE_T);
 	ball = new Sprite(ballTexture, size, position, &m_windowBounds, scale, speed);
@@ -55,7 +55,7 @@ void Renderer::CreateWindowSizeDependentResources()
 	CreateDDSTextureFromFile(m_d3dDevice.Get(), L"Assets/paddle.dds", nullptr, &paddleTexture, MAXSIZE_T);
 	size = PADDLE_DIM;
 	scale = .4f;
-	speed = 100;
+	speed = 200;
 	paddleBounds = m_windowBounds;
 	paddleBounds.X = m_windowBounds.Width / 15;
 	paddleBounds.Width = m_windowBounds.Width - paddleBounds.X*2;

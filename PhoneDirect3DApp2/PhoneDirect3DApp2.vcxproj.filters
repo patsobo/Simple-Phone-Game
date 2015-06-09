@@ -45,6 +45,7 @@
     <ClCompile Include="pch.cpp" />
     <ClCompile Include="Renderer.cpp" />
     <ClCompile Include="Sprite.cpp" />
+    <ClCompile Include="Countdown.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="PhoneDirect3DApp2.h" />
@@ -53,6 +54,7 @@
     <ClInclude Include="BasicTimer.h" />
     <ClInclude Include="pch.h" />
     <ClInclude Include="Renderer.h" />
+    <ClInclude Include="Countdown.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\deluxe.spritefont">
