@@ -63,12 +63,75 @@ void Renderer::CreateWindowSizeDependentResources()
 	paddle1 = new Sprite(paddleTexture, size, position, &paddleBounds, scale, speed);
 	position.x = paddleBounds.X + paddleBounds.Width - size.x * scale;
 	paddle2 = new Sprite(paddleTexture, size, position, &paddleBounds, scale, speed);
+
+	countdown = new Countdown(START_TIME_MILLI, XMFLOAT2(m_windowBounds.Width / 2, m_windowBounds.Height / 5));
+
+	// Audio
+	// Create DirectXTK for Audio objects 
+	AUDIO_ENGINE_FLAGS eflags = AudioEngine_Default;
+#ifdef _DEBUG 
+	eflags = eflags | AudioEngine_Debug;
+#endif 
+	m_audEngine.reset(new AudioEngine(eflags));
+
+	m_audioEvent = 0;
+	m_audioTimerAcc = 10.f;
+	m_retryDefault = false;
+
+	//m_waveBank.reset(new WaveBank(m_audEngine.get(), L"assets\\adpcmdroid.xwb"));
+	m_musicFile.reset(new SoundEffect(m_audEngine.get(), L"Assets/Windfish Music.wav"));
+	m_music = m_musicFile->CreateInstance();
+	//m_effect2 = m_waveBank->CreateInstance(10);
+
+	m_music->Play(true);
+	//m_effect2->Play();
 }
 
 void Renderer::Update(float timeTotal, float timeDelta)
 {
+	HandleAudio(timeTotal, timeDelta);
+	HandleGameplay(timeTotal, timeDelta);
+}
+
+void Renderer::HandleAudio(float timeTotal, float timeDelta)
+{
+	m_audioTimerAcc -= timeDelta;
+	if (m_audioTimerAcc < 0)
+	{
+		if (m_retryDefault)
+		{
+			m_retryDefault = false;
+			if (m_audEngine->Reset())
+			{
+				// Restart looping audio 
+				m_music->Play(true);
+			}
+		}
+		else
+		{
+			// Unused atm
+			m_audioTimerAcc = 4.f;
+
+			//m_waveBank->Play(m_audioEvent++);
+
+			if (m_audioEvent >= 11)
+				m_audioEvent = 0;
+		}
+	}
+
+	if (!m_audEngine->IsCriticalError() && m_audEngine->Update())
+	{
+		// Setup a retry in 1 second (can happen when transitioning to and from a BlueTooth audio connection) 
+		m_audioTimerAcc = 1.f;
+		m_retryDefault = true;
+	}
+}
+
+void Renderer::HandleGameplay(float timeTotal, float timeDelta)
+{
 	if (gameStarted)
 	{
+		countdown->Update(timeTotal, timeDelta);
 		ball->Update(timeTotal, timeDelta);
 		paddle1->Update(timeTotal, timeDelta);
 		paddle2->Update(timeTotal, timeDelta);
@@ -110,6 +173,10 @@ void Renderer::Update(float timeTotal, float timeDelta)
 			ball->adjustPosition();	// Correction for minor collision
 			addToScore(1);
 		}
+
+		// Check if countdown is over
+		if (countdown->isFinished())
+			resetGame();
 	}
 
 	// insert reset game logic
@@ -141,6 +208,7 @@ void Renderer::Render()
 	// Insert objects here
 	if (gameStarted)
 	{
+		countdown->Draw(m_spriteBatch.get(), m_spriteFont.get());
 		ball->Draw(m_spriteBatch.get());
 		paddle1->Draw(m_spriteBatch.get());
 		paddle2->Draw(m_spriteBatch.get());
@@ -217,85 +285,20 @@ void Renderer::displayScores()
 
 	float* digitLength = m_spriteFont->MeasureString(L"0").n128_f32;
 	XMFLOAT2 position = XMFLOAT2(m_windowBounds.Width - m_windowBounds.Width / 20.0f, m_windowBounds.Height / 20.0f);
-	displayNum(score, position);
-	position.x = 0;
-	for (int i = 0; i < getNumDigits(highScore); i++)
+	float *stringlength = m_spriteFont->MeasureString(L"Score").n128_f32;
+	m_spriteFont->DrawString(m_spriteBatch.get(), L"Score",
+		position, Colors::Black, 0.0f, XMFLOAT2(*stringlength, 0.0f), 1.0f, DirectX::SpriteEffects_None, 0.0f);
+
+	position.y += 32;
+	SpriteText::displayNum(m_spriteBatch.get(), m_spriteFont.get(), score, position, 0);
+	position.x = m_windowBounds.Width / 20;
+	position.y -= 32;
+	m_spriteFont->DrawString(m_spriteBatch.get(), L"High Score",
+		position, Colors::Black, 0.0f, XMFLOAT2(0.0f, 0.0f), 1.0f, DirectX::SpriteEffects_None, 0.0f);
+	for (int i = 0; i < SpriteText::getNumDigits(highScore) - 1; i++)
 		position.x += *digitLength;
-	displayNum(highScore, position);
-}
-
-void Renderer::displayNum(int myScore, XMFLOAT2 position)
-{
-	int numDigits = getNumDigits(myScore);
-	wchar_t const* num;
-	float* stringlength;
-	float tempScore;
-	for (int i = 0; i < numDigits; i++)
-	{
-		tempScore = myScore % 10;
-		num = numToWchar_t(tempScore);
-		stringlength = m_spriteFont->MeasureString(num).n128_f32;
-
-		m_spriteFont->DrawString(m_spriteBatch.get(), num, position,
-			Colors::Black, 0.0f, XMFLOAT2(*stringlength / 2.0f, 0.0f), 1.0f, DirectX::SpriteEffects_None, 0.0f);
-		position.x -= *stringlength;
-
-		myScore /= 10;
-	}
-
-}
-
-int Renderer::getNumDigits(int num)
-{
-	if (num == 0) return 1;
-	int counter = 0;
-	if (num < 0) counter = 1; // remove this line if '-' counts as a digit
-	while (num)
-	{
-		num /= 10;
-		counter++;
-	}
-	return counter;
-}
-
-wchar_t const* Renderer::numToWchar_t(int num)
-{
-	switch (num)
-	{
-	case 0:
-		return L"0";
-		break;
-	case 1:
-		return L"1";
-		break;
-	case 2:
-		return L"2";
-		break;
-	case 3:
-		return L"3";
-		break;
-	case 4:
-		return L"4";
-		break;
-	case 5:
-		return L"5";
-		break;
-	case 6:
-		return L"6";
-		break;
-	case 7:
-		return L"7";
-		break;
-	case 8:
-		return L"8";
-		break;
-	case 9:
-		return L"9";
-		break;
-	default:
-		return L"X";
-		break;
-	}
+	position.y += 32;
+	SpriteText::displayNum(m_spriteBatch.get(), m_spriteFont.get(), highScore, position, 0);
 }
 
 void Renderer::addToScore(int val)
@@ -311,6 +314,7 @@ void Renderer::resetGame()
 	ball->reset();
 	paddle1->reset();
 	paddle2->reset();
+	countdown->resetTime();
 	
 	gameStarted = false;
 }
@@ -319,6 +323,7 @@ void Renderer::setGameRunning(bool running)
 {
 	gameStarted = running;
 	ball->setVelocity(XMFLOAT2(1, 0));
+	countdown->start();
 }
 
 bool Renderer::isGameRunning()

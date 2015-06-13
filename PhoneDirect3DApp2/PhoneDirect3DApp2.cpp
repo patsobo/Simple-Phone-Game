@@ -29,6 +29,8 @@ void PhoneDirect3DApp2::Initialize(CoreApplicationView^ applicationView)
 		ref new EventHandler<Platform::Object^>(this, &PhoneDirect3DApp2::OnResuming);
 
 	m_renderer = ref new Renderer();
+
+	//m_renderer->m_s
 }
 
 void PhoneDirect3DApp2::SetWindow(CoreWindow^ window)
@@ -117,7 +119,7 @@ void PhoneDirect3DApp2::OnPointerReleased(CoreWindow^ sender, PointerEventArgs^ 
 	}
 
 	// For testing purposes
-	OutputDebugString(L"tap");
+	//OutputDebugString(L"tap");
 }
 
 void PhoneDirect3DApp2::OnActivated(CoreApplicationView^ applicationView, IActivatedEventArgs^ args)

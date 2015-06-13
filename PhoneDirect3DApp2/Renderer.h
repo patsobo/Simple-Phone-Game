@@ -7,9 +7,12 @@
 #include <directxmath.h>
 #include <list>
 
+#include "Audio.h"
 #include "SpriteFont.h"
 #include "SpriteBatch.h"
 #include "Sprite.h"
+#include "SpriteText.h"
+#include "Countdown.h"
 
 using namespace DirectX;
 using namespace Windows::Devices::Sensors;
@@ -17,6 +20,7 @@ using namespace std;
 
 const XMFLOAT2 PADDLE_DIM = XMFLOAT2(178, 401);
 const XMFLOAT2 BALL_DIM = XMFLOAT2(500, 500);
+const int START_TIME_MILLI = 15000;
 
 ref class Renderer sealed : public Direct3DBase
 {
@@ -37,17 +41,28 @@ public:
 	void resetPaddles();
 
 	// Method for updating time-dependent objects.
+	// Note: time floats are in seconds
 	void Update(float timeTotal, float timeDelta);
 
 private:
+	void HandleAudio(float timeTotal, float timeDelta);
+	void HandleGameplay(float timeTotal, float timeDelta);
+
+	std::unique_ptr<DirectX::AudioEngine> m_audEngine;
+	//std::unique_ptr<DirectX::WaveBank> m_waveBank;
+	std::unique_ptr<DirectX::SoundEffect> m_musicFile;
+	std::unique_ptr<DirectX::SoundEffectInstance> m_music;
+	//std::unique_ptr<DirectX::SoundEffectInstance> m_effect2;
+
+	uint32_t m_audioEvent;
+	float m_audioTimerAcc;
+	bool m_retryDefault;
+
 	bool m_loadingComplete;
 	bool gameStarted;
 	int highScore;
 	int score;
 	void displayScores();
-	void displayNum(int myScore, XMFLOAT2 position);
-	int getNumDigits(int num);
-	wchar_t const* numToWchar_t(int num);
 
 	uint32 m_indexCount;
 
@@ -65,6 +80,7 @@ private:
 	Sprite* paddle1;
 	Sprite* paddle2;
 	Windows::Foundation::Rect paddleBounds;
+	Countdown* countdown;
 
 	unique_ptr<SpriteFont> m_spriteFont;
 };

@@ -138,6 +138,8 @@
     <ClInclude Include="Direct3DBase.h" />
     <ClInclude Include="BasicTimer.h" />
     <ClInclude Include="pch.h" />
+    <ClInclude Include="Sprite.h" />
+    <ClInclude Include="SpriteText.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Countdown.cpp" />
@@ -148,6 +150,7 @@
       <PrecompiledHeader>Create</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="Sprite.cpp" />
+    <ClCompile Include="SpriteText.cpp" />
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="SimplePixelShader.hlsl">
@@ -174,6 +177,9 @@
   </ItemGroup>
   <ItemGroup>
     <Xml Include="WMAppManifest.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Media Include="Assets\Windfish Music.wav" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <Import Project="$(MSBuildExtensionsPath)\Microsoft\WindowsPhone\v$(TargetPlatformVersion)\Microsoft.Cpp.WindowsPhone.$(TargetPlatformVersion).targets" />

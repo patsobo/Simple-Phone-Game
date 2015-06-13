@@ -27,6 +27,7 @@ protected:
 	void OnPointerReleased(Windows::UI::Core::CoreWindow^ sender, Windows::UI::Core::PointerEventArgs^ args);
 
 private:
+	//std::unique_ptr<SoundPlayer> m_soundPlayer;
 	Renderer^ m_renderer;
 	bool m_windowClosed;
 	bool m_windowVisible;
