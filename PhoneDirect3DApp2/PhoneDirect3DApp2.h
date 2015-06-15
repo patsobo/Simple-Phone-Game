@@ -2,6 +2,7 @@
 
 #include "pch.h"
 #include "Renderer.h"
+#include "GameState.h"
 
 ref class PhoneDirect3DApp2 sealed : public Windows::ApplicationModel::Core::IFrameworkView
 {

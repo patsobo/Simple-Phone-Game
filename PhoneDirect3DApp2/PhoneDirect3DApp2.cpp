@@ -94,11 +94,24 @@ void PhoneDirect3DApp2::OnWindowClosed(CoreWindow^ sender, CoreWindowEventArgs^ 
 
 void PhoneDirect3DApp2::OnPointerPressed(CoreWindow^ sender, PointerEventArgs^ args)
 {
-	if (m_renderer->isGameRunning())
-	{
-		m_renderer->movePaddles();
-		//m_renderer->addToScore(1);
-	}
+	Windows::UI::Input::PointerPoint^ currentPoint = args->CurrentPoint;
+
+	m_renderer->HandlePressInput(currentPoint);
+
+	//switch (m_renderer->getGameState())
+	//{
+	//case GameState::InGameActive:
+	//	m_renderer->movePaddles();
+	//	break;
+	//default:
+	//	break;
+	//}
+
+	//if (m_renderer->isGameRunning())
+	//{
+	//	m_renderer->movePaddles();
+	//	//m_renderer->addToScore(1);
+	//}
 }
 
 void PhoneDirect3DApp2::OnPointerMoved(CoreWindow^ sender, PointerEventArgs^ args)
@@ -108,15 +121,36 @@ void PhoneDirect3DApp2::OnPointerMoved(CoreWindow^ sender, PointerEventArgs^ arg
 
 void PhoneDirect3DApp2::OnPointerReleased(CoreWindow^ sender, PointerEventArgs^ args)
 {
-	if (!m_renderer->isGameRunning())
-	{
-		m_renderer->setGameRunning(true);
-		m_renderer->randomizeEnemies();
-	}
-	else
-	{
-		m_renderer->resetPaddles();
-	}
+	Windows::UI::Input::PointerPoint^ currentPoint = args->CurrentPoint;
+
+	m_renderer->HandleReleaseInput(currentPoint);
+
+	//switch (m_renderer->getGameState())
+	//{
+	//case GameState::Initial:
+	//	m_renderer->setGameState(GameState::InGameActive);
+	//	m_renderer->randomizeEnemies();
+	//	break;
+	//case GameState::InGameActive:
+	//	//m_renderer->HandlePoint(currentPoint);
+	//	m_renderer->resetPaddles();
+	//	break;
+	//case GameState::InGamePaused:
+	//	//m_renderer->HandlePoint(currentPoint);
+	//	break;
+	//default:
+	//	break;
+	//}
+
+	//if (!m_renderer->isGameRunning())
+	//{
+	//	m_renderer->setGameRunning(true);
+	//	m_renderer->randomizeEnemies();
+	//}
+	//else
+	//{
+	//	m_renderer->resetPaddles();
+	//}
 
 	// For testing purposes
 	//OutputDebugString(L"tap");

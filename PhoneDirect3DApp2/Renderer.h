@@ -13,11 +13,14 @@
 #include "Sprite.h"
 #include "SpriteText.h"
 #include "Countdown.h"
+#include "GameState.h"
 
 using namespace DirectX;
 using namespace Windows::Devices::Sensors;
 using namespace std;
 
+const XMFLOAT2 PAUSE_DIM = XMFLOAT2(32, 38);
+const XMFLOAT2 BGD_DIM = XMFLOAT2(768, 1152);
 const XMFLOAT2 PADDLE_DIM = XMFLOAT2(178, 401);
 const XMFLOAT2 BALL_DIM = XMFLOAT2(500, 500);
 const int START_TIME_MILLI = 15000;
@@ -39,14 +42,22 @@ public:
 	void addToScore(int val);
 	void movePaddles();
 	void resetPaddles();
+	//GameState getGameState();
+	//void setGameState(GameState newState);
+
+	void HandlePressInput(Windows::UI::Input::PointerPoint^ currentPoint);	// called when pointer is down
+	void HandleReleaseInput(Windows::UI::Input::PointerPoint^ currentPoint);	// called when pointer is released
 
 	// Method for updating time-dependent objects.
 	// Note: time floats are in seconds
 	void Update(float timeTotal, float timeDelta);
 
 private:
+	GameState gameState;
+
 	void HandleAudio(float timeTotal, float timeDelta);
 	void HandleGameplay(float timeTotal, float timeDelta);
+	bool onButton(Sprite* sprite, XMFLOAT2 point);
 
 	std::unique_ptr<DirectX::AudioEngine> m_audEngine;
 	//std::unique_ptr<DirectX::WaveBank> m_waveBank;
@@ -74,11 +85,15 @@ private:
 	float scale;
 
 	// insert items here
+	ID3D11ShaderResourceView* backgroundTexture;
 	ID3D11ShaderResourceView* ballTexture;
 	ID3D11ShaderResourceView* paddleTexture;
+	ID3D11ShaderResourceView* pauseButtonTexture;
 	Sprite* ball;
 	Sprite* paddle1;
 	Sprite* paddle2;
+	Sprite* background;
+	Sprite* pauseButton;
 	Windows::Foundation::Rect paddleBounds;
 	Countdown* countdown;
 

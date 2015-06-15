@@ -122,8 +122,10 @@
   <ItemGroup>
     <Image Include="Assets\ApplicationIcon.png" />
     <Image Include="Assets\AlignmentGrid.png" />
+    <Image Include="Assets\background.dds" />
     <Image Include="Assets\ball.dds" />
     <Image Include="Assets\paddle.dds" />
+    <Image Include="Assets\pauseButton.dds" />
     <Image Include="Assets\Tiles\FlipCycleTileLarge.png" />
     <Image Include="Assets\Tiles\FlipCycleTileMedium.png" />
     <Image Include="Assets\Tiles\FlipCycleTileSmall.png" />
@@ -132,6 +134,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Countdown.h" />
+    <ClInclude Include="GameState.h" />
     <ClInclude Include="PhoneDirect3DApp2.h" />
     <ClInclude Include="Renderer.h" />
     <ClInclude Include="DirectXHelper.h" />

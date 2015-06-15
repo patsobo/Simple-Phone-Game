@@ -12,6 +12,7 @@ Renderer::Renderer() :
 m_loadingComplete(false),
 m_indexCount(0)
 {
+	gameState = GameState::Initial;
 	gameStarted = false;
 	scale = DisplayProperties::LogicalDpi / 96.0f;
 	score = 0;
@@ -41,6 +42,24 @@ void Renderer::CreateWindowSizeDependentResources()
 	XMFLOAT2 position;
 	float scale;
 	float speed;
+
+	// Create the pause button
+	size = PAUSE_DIM;
+	scale = 2.0f;
+	position = XMFLOAT2(20, 20);
+	speed = 0;
+	CreateDDSTextureFromFile(m_d3dDevice.Get(), L"Assets/pauseButton.dds", nullptr, &pauseButtonTexture, MAXSIZE_T);
+	pauseButton = new Sprite(pauseButtonTexture, size, position, &m_windowBounds , scale, speed);
+
+	// Create the background
+	size = BGD_DIM;
+	float scaleX = m_windowBounds.Width / size.x;
+	float scaleY = m_windowBounds.Height / size.y;
+	scale = scaleX > scaleY ? scaleX : scaleY;
+	position = XMFLOAT2(0, 0);
+	speed = 0;
+	CreateDDSTextureFromFile(m_d3dDevice.Get(), L"Assets/background.dds", nullptr, &backgroundTexture, MAXSIZE_T);
+	background = new Sprite(backgroundTexture, size, position, &m_windowBounds, scale, speed);	// Technically, m_windowBounds is too small, but, eh...
 
 	// Create the ball
 	size = BALL_DIM;
@@ -90,7 +109,8 @@ void Renderer::CreateWindowSizeDependentResources()
 void Renderer::Update(float timeTotal, float timeDelta)
 {
 	HandleAudio(timeTotal, timeDelta);
-	HandleGameplay(timeTotal, timeDelta);
+	if (gameState == GameState::InGameActive)
+		HandleGameplay(timeTotal, timeDelta);
 }
 
 void Renderer::HandleAudio(float timeTotal, float timeDelta)
@@ -129,6 +149,8 @@ void Renderer::HandleAudio(float timeTotal, float timeDelta)
 
 void Renderer::HandleGameplay(float timeTotal, float timeDelta)
 {
+	pauseButton->Update(timeTotal, timeDelta);
+	background->Update(timeTotal, timeDelta);
 	if (gameStarted)
 	{
 		countdown->Update(timeTotal, timeDelta);
@@ -205,17 +227,9 @@ void Renderer::Render()
 
 	m_spriteBatch->Begin();
 
-	// Insert objects here
-	if (gameStarted)
-	{
-		countdown->Draw(m_spriteBatch.get(), m_spriteFont.get());
-		ball->Draw(m_spriteBatch.get());
-		paddle1->Draw(m_spriteBatch.get());
-		paddle2->Draw(m_spriteBatch.get());
-		displayScores();
-	}
-
-	else if (!gameStarted)
+	// For now (later, when there's pause menus and stuff, we'll need to account for states (TODO))
+	background->Draw(m_spriteBatch.get());
+	if (gameState == GameState::Initial)
 	{
 		float* stringlength = m_spriteFont->MeasureString(L"Tap to start!").n128_f32;
 
@@ -223,6 +237,34 @@ void Renderer::Render()
 			XMFLOAT2(m_windowBounds.Width / 2.0f, m_windowBounds.Height / (5.0f / 2.0f)),
 			Colors::Black, 0.0f, XMFLOAT2(*stringlength / 2.0f, 0.0f), 1.0f, DirectX::SpriteEffects_None, 0.0f);
 	}
+	else if (gameState == GameState::InGameActive || gameState == GameState::InGamePaused)
+	{
+		ball->Draw(m_spriteBatch.get());
+		paddle1->Draw(m_spriteBatch.get());
+		paddle2->Draw(m_spriteBatch.get());
+		countdown->Draw(m_spriteBatch.get(), m_spriteFont.get());
+		pauseButton->Draw(m_spriteBatch.get());
+		displayScores();
+	}
+
+	//// Insert objects here
+	//if (gameStarted)
+	//{
+	//	ball->Draw(m_spriteBatch.get());
+	//	paddle1->Draw(m_spriteBatch.get());
+	//	paddle2->Draw(m_spriteBatch.get());
+	//	countdown->Draw(m_spriteBatch.get(), m_spriteFont.get());
+	//	displayScores();
+	//}
+
+	//else if (!gameStarted)
+	//{
+	//	float* stringlength = m_spriteFont->MeasureString(L"Tap to start!").n128_f32;
+
+	//	m_spriteFont->DrawString(m_spriteBatch.get(), L"Tap to start!",
+	//		XMFLOAT2(m_windowBounds.Width / 2.0f, m_windowBounds.Height / (5.0f / 2.0f)),
+	//		Colors::Black, 0.0f, XMFLOAT2(*stringlength / 2.0f, 0.0f), 1.0f, DirectX::SpriteEffects_None, 0.0f);
+	//}
 
 	m_spriteBatch->End();
 }
@@ -284,7 +326,7 @@ void Renderer::displayScores()
 		highScore = score;
 
 	float* digitLength = m_spriteFont->MeasureString(L"0").n128_f32;
-	XMFLOAT2 position = XMFLOAT2(m_windowBounds.Width - m_windowBounds.Width / 20.0f, m_windowBounds.Height / 20.0f);
+	XMFLOAT2 position = XMFLOAT2(m_windowBounds.Width - m_windowBounds.Width / 20.0f, m_windowBounds.Height / 20.0f + pauseButton->getHeight() + 20);	// replace 10 with variable
 	float *stringlength = m_spriteFont->MeasureString(L"Score").n128_f32;
 	m_spriteFont->DrawString(m_spriteBatch.get(), L"Score",
 		position, Colors::Black, 0.0f, XMFLOAT2(*stringlength, 0.0f), 1.0f, DirectX::SpriteEffects_None, 0.0f);
@@ -319,8 +361,65 @@ void Renderer::resetGame()
 	gameStarted = false;
 }
 
+void Renderer::HandlePressInput(Windows::UI::Input::PointerPoint^ currentPoint)
+{
+	XMFLOAT2 vectorPoint = XMFLOAT2(currentPoint->RawPosition.X, currentPoint->RawPosition.Y);
+
+	switch (gameState)
+	{
+	case GameState::InGameActive:
+		movePaddles();
+		break;
+	case GameState::InGamePaused:
+		break;
+	case GameState::Initial:
+		break;
+	default:
+		break;
+	}
+}
+
+void Renderer::HandleReleaseInput(Windows::UI::Input::PointerPoint^ currentPoint)
+{
+	XMFLOAT2 vectorPoint = XMFLOAT2(currentPoint->RawPosition.X, currentPoint->RawPosition.Y);
+
+	switch (gameState)
+	{
+	case GameState::InGameActive:
+		if (onButton(pauseButton, vectorPoint))
+			gameState = GameState::InGamePaused;
+		else
+		{
+			resetPaddles();
+		}
+		break;
+	case GameState::InGamePaused:
+		if (onButton(pauseButton, vectorPoint))
+		{
+			resetPaddles();
+			gameState = GameState::InGameActive;
+		}
+		break;
+	case GameState::Initial:
+		setGameRunning(true);
+		gameState = GameState::InGameActive;
+		break;
+	default:
+		break;
+	}
+}
+
+bool Renderer::onButton(Sprite* button, XMFLOAT2 pointer)
+{
+	Point point = Point(pointer.x, pointer.y);
+	if (button->getBoundingBox()->Contains(point))
+		return true;
+	return false;
+}
+
 void Renderer::setGameRunning(bool running)
 {
+	//gameState = 
 	gameStarted = running;
 	ball->setVelocity(XMFLOAT2(1, 0));
 	countdown->start();
@@ -330,3 +429,6 @@ bool Renderer::isGameRunning()
 {
 	return gameStarted;
 }
+
+//void Renderer::setGameState(GameState newState) { gameState = newState; }
+//GameState Renderer::getGameState() { return gameState; }

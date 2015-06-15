@@ -34,6 +34,12 @@
     <Image Include="Assets\paddle.dds">
       <Filter>Assets</Filter>
     </Image>
+    <Image Include="Assets\background.dds">
+      <Filter>Assets</Filter>
+    </Image>
+    <Image Include="Assets\pauseButton.dds">
+      <Filter>Assets</Filter>
+    </Image>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="SimplePixelShader.hlsl" />
@@ -58,6 +64,7 @@
     <ClInclude Include="Countdown.h" />
     <ClInclude Include="Sprite.h" />
     <ClInclude Include="SpriteText.h" />
+    <ClInclude Include="GameState.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\deluxe.spritefont">
