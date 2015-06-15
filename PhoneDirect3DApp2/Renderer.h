@@ -38,7 +38,6 @@ public:
 	void randomizeEnemies();
 	void resetGame();
 	void setGameRunning(bool gameStarted);
-	bool isGameRunning();
 	void addToScore(int val);
 	void movePaddles();
 	void resetPaddles();
@@ -70,7 +69,6 @@ private:
 	bool m_retryDefault;
 
 	bool m_loadingComplete;
-	bool gameStarted;
 	int highScore;
 	int score;
 	void displayScores();

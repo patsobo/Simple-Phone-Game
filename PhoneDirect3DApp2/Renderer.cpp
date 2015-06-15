@@ -13,7 +13,6 @@ m_loadingComplete(false),
 m_indexCount(0)
 {
 	gameState = GameState::Initial;
-	gameStarted = false;
 	scale = DisplayProperties::LogicalDpi / 96.0f;
 	score = 0;
 	highScore = 0; // To be replaced with memory call
@@ -151,55 +150,52 @@ void Renderer::HandleGameplay(float timeTotal, float timeDelta)
 {
 	pauseButton->Update(timeTotal, timeDelta);
 	background->Update(timeTotal, timeDelta);
-	if (gameStarted)
+	countdown->Update(timeTotal, timeDelta);
+	ball->Update(timeTotal, timeDelta);
+	paddle1->Update(timeTotal, timeDelta);
+	paddle2->Update(timeTotal, timeDelta);
+
+	// Reverse direction if ball hits a paddle
+	if (ball->CollidesWith(paddle1) || ball->CollidesWith(paddle2))
 	{
-		countdown->Update(timeTotal, timeDelta);
-		ball->Update(timeTotal, timeDelta);
-		paddle1->Update(timeTotal, timeDelta);
-		paddle2->Update(timeTotal, timeDelta);
-
-		// Reverse direction if ball hits a paddle
-		if (ball->CollidesWith(paddle1) || ball->CollidesWith(paddle2))
+		if (ball->CollidesWith(paddle1) && ball->CollidesWith(paddle2))
 		{
-			if (ball->CollidesWith(paddle1) && ball->CollidesWith(paddle2))
-			{
-				resetGame();
-				return;
-			}
-			if (ball->CollidesWith(paddle1))
-			{
-				while (ball->CollidesWith(paddle1))
-				{
-					ball->adjustPosition();
-					if (ball->CollidesWith(paddle1) && ball->CollidesWith(paddle2))
-					{
-						resetGame();
-						return;
-					}
-				}
-				ball->setVelocity(XMFLOAT2(1, 0));
-			}
-			else
-			{
-				while (ball->CollidesWith(paddle2))
-				{
-					ball->adjustPosition();
-					if (ball->CollidesWith(paddle1) && ball->CollidesWith(paddle2))
-					{
-						resetGame();
-						return;
-					}
-				}
-				ball->setVelocity(XMFLOAT2(-1, 0));
-			}
-			ball->adjustPosition();	// Correction for minor collision
-			addToScore(1);
-		}
-
-		// Check if countdown is over
-		if (countdown->isFinished())
 			resetGame();
+			return;
+		}
+		if (ball->CollidesWith(paddle1))
+		{
+			while (ball->CollidesWith(paddle1))
+			{
+				ball->adjustPosition();
+				if (ball->CollidesWith(paddle1) && ball->CollidesWith(paddle2))
+				{
+					resetGame();
+					return;
+				}
+			}
+			ball->setVelocity(XMFLOAT2(1, 0));
+		}
+		else
+		{
+			while (ball->CollidesWith(paddle2))
+			{
+				ball->adjustPosition();
+				if (ball->CollidesWith(paddle1) && ball->CollidesWith(paddle2))
+				{
+					resetGame();
+					return;
+				}
+			}
+			ball->setVelocity(XMFLOAT2(-1, 0));
+		}
+		ball->adjustPosition();	// Correction for minor collision
+		addToScore(1);
 	}
+
+	// Check if countdown is over
+	if (countdown->isFinished())
+		resetGame();
 
 	// insert reset game logic
 }
@@ -350,6 +346,7 @@ void Renderer::addToScore(int val)
 
 void Renderer::resetGame()
 {
+	gameState = GameState::Initial;
 	if (score > highScore)
 		highScore = score;
 	score = 0;
@@ -357,8 +354,6 @@ void Renderer::resetGame()
 	paddle1->reset();
 	paddle2->reset();
 	countdown->resetTime();
-	
-	gameStarted = false;
 }
 
 void Renderer::HandlePressInput(Windows::UI::Input::PointerPoint^ currentPoint)
@@ -420,15 +415,6 @@ bool Renderer::onButton(Sprite* button, XMFLOAT2 pointer)
 void Renderer::setGameRunning(bool running)
 {
 	//gameState = 
-	gameStarted = running;
 	ball->setVelocity(XMFLOAT2(1, 0));
 	countdown->start();
 }
-
-bool Renderer::isGameRunning()
-{
-	return gameStarted;
-}
-
-//void Renderer::setGameState(GameState newState) { gameState = newState; }
-//GameState Renderer::getGameState() { return gameState; }
