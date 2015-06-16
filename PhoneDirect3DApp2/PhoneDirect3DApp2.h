@@ -32,6 +32,9 @@ private:
 	Renderer^ m_renderer;
 	bool m_windowClosed;
 	bool m_windowVisible;
+
+	void saveGameData();
+	int getGameData();
 };
 
 ref class Direct3DApplicationSource sealed : Windows::ApplicationModel::Core::IFrameworkViewSource

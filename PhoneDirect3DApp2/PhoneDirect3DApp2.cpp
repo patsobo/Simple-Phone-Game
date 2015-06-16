@@ -1,6 +1,7 @@
 ﻿#include "pch.h"
 #include "PhoneDirect3DApp2.h"
 #include "BasicTimer.h"
+#include <fstream>
 
 using namespace Windows::ApplicationModel;
 using namespace Windows::ApplicationModel::Core;
@@ -28,9 +29,8 @@ void PhoneDirect3DApp2::Initialize(CoreApplicationView^ applicationView)
 	CoreApplication::Resuming +=
 		ref new EventHandler<Platform::Object^>(this, &PhoneDirect3DApp2::OnResuming);
 
-	m_renderer = ref new Renderer();
-
-	//m_renderer->m_s
+	int highScore = getGameData();
+	m_renderer = ref new Renderer(highScore);
 }
 
 void PhoneDirect3DApp2::SetWindow(CoreWindow^ window)
@@ -128,6 +128,7 @@ void PhoneDirect3DApp2::OnSuspending(Platform::Object^ sender, SuspendingEventAr
 	create_task([this, deferral]()
 	{
 		// Insert your code here.
+		saveGameData();
 
 		deferral->Complete();
 	});
@@ -135,10 +136,49 @@ void PhoneDirect3DApp2::OnSuspending(Platform::Object^ sender, SuspendingEventAr
  
 void PhoneDirect3DApp2::OnResuming(Platform::Object^ sender, Platform::Object^ args)
 {
+	int highScore = getGameData();
+	m_renderer->setHighScore(highScore);
+
 	// Restore any data or state that was unloaded on suspend. By default, data
 	// and state are persisted when resuming from suspend. Note that this event
 	// does not occur if the app was previously terminated.
 	 m_renderer->CreateWindowSizeDependentResources();
+}
+
+void PhoneDirect3DApp2::saveGameData()
+{
+	// get local folder (= isolated storage)
+	auto local = Windows::Storage::ApplicationData::Current->LocalFolder;
+	auto localFileNamePlatformString = local->Path + "\\game.sav";
+	FILE* pFile;
+
+	// Write high score to memory
+	auto fdsa = _wfopen_s(&pFile, localFileNamePlatformString->Data(), L"w");	// For writing
+	fprintf(pFile, "%d", m_renderer->getHighScore());
+	rewind(pFile);
+	fclose(pFile);
+	//fscanf_s(pFile, "%s", str);	// Doesn't work for some reason...look into later (fscan article on cplusplus.com)
+}
+int PhoneDirect3DApp2::getGameData()
+{
+	// get local folder (= isolated storage)
+	auto local = Windows::Storage::ApplicationData::Current->LocalFolder;
+	auto localFileNamePlatformString = local->Path + "\\game.sav";
+
+	// NOW IT WORKS!!!!  YESSSSSS!!!
+	int highScore;
+	FILE* pFile;
+
+	// Read high score
+	auto f = _wfopen_s(&pFile, localFileNamePlatformString->Data(), L"r");	// Open the file for reading
+	if (f == 0)
+	{
+		fscanf_s(pFile, "%d", &highScore);
+		auto res3 = fclose(pFile);	// Close the file
+	}
+	else highScore = 0;	// If there is no high score
+
+	return highScore;
 }
 
 IFrameworkView^ Direct3DApplicationSource::CreateView()

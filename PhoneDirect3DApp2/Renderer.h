@@ -29,6 +29,7 @@ ref class Renderer sealed : public Direct3DBase
 {
 public:
 	Renderer();
+	Renderer(int highScore);
 
 	// Direct3DBase methods.
 	virtual void CreateDeviceResources() override;
@@ -41,11 +42,11 @@ public:
 	void addToScore(int val);
 	void movePaddles();
 	void resetPaddles();
-	//GameState getGameState();
-	//void setGameState(GameState newState);
+	int getHighScore();
+	void setHighScore(int newScore);
 
-	void HandlePressInput(Windows::UI::Input::PointerPoint^ currentPoint);	// called when pointer is down
-	void HandleReleaseInput(Windows::UI::Input::PointerPoint^ currentPoint);	// called when pointer is released
+	void HandlePressInput(Windows::UI::Input::PointerPoint^ currentPoint);	// called when pointer is down, alters state
+	void HandleReleaseInput(Windows::UI::Input::PointerPoint^ currentPoint);	// called when pointer is released, alters state
 
 	// Method for updating time-dependent objects.
 	// Note: time floats are in seconds

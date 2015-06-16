@@ -17,4 +17,5 @@ enum class GameState
 	HighScoreDisplay,
 	InGameActive,
 	InGamePaused,
+	//GameOver,
 };

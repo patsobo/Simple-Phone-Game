@@ -19,6 +19,17 @@ m_indexCount(0)
 	srand((unsigned)time(0));
 }
 
+Renderer::Renderer(int highScore) :
+m_loadingComplete(false),
+m_indexCount(0)
+{
+	gameState = GameState::Initial;
+	scale = DisplayProperties::LogicalDpi / 96.0f;
+	score = 0;
+	this->highScore = highScore; // To be replaced with memory call
+	srand((unsigned)time(0));
+}
+
 void Renderer::CreateDeviceResources()
 {
 	Direct3DBase::CreateDeviceResources();
@@ -156,6 +167,7 @@ void Renderer::HandleGameplay(float timeTotal, float timeDelta)
 	paddle2->Update(timeTotal, timeDelta);
 
 	// Reverse direction if ball hits a paddle
+	// This entire block is essentially the collision detector
 	if (ball->CollidesWith(paddle1) || ball->CollidesWith(paddle2))
 	{
 		if (ball->CollidesWith(paddle1) && ball->CollidesWith(paddle2))
@@ -223,7 +235,6 @@ void Renderer::Render()
 
 	m_spriteBatch->Begin();
 
-	// For now (later, when there's pause menus and stuff, we'll need to account for states (TODO))
 	background->Draw(m_spriteBatch.get());
 	if (gameState == GameState::Initial)
 	{
@@ -243,65 +254,12 @@ void Renderer::Render()
 		displayScores();
 	}
 
-	//// Insert objects here
-	//if (gameStarted)
-	//{
-	//	ball->Draw(m_spriteBatch.get());
-	//	paddle1->Draw(m_spriteBatch.get());
-	//	paddle2->Draw(m_spriteBatch.get());
-	//	countdown->Draw(m_spriteBatch.get(), m_spriteFont.get());
-	//	displayScores();
-	//}
-
-	//else if (!gameStarted)
-	//{
-	//	float* stringlength = m_spriteFont->MeasureString(L"Tap to start!").n128_f32;
-
-	//	m_spriteFont->DrawString(m_spriteBatch.get(), L"Tap to start!",
-	//		XMFLOAT2(m_windowBounds.Width / 2.0f, m_windowBounds.Height / (5.0f / 2.0f)),
-	//		Colors::Black, 0.0f, XMFLOAT2(*stringlength / 2.0f, 0.0f), 1.0f, DirectX::SpriteEffects_None, 0.0f);
-	//}
-
 	m_spriteBatch->End();
 }
 
 void Renderer::randomizeEnemies()
 {
-	//float distX = 0.0f, distY = 0.0f;
-	//bool positionsOverlap = false;
-
-	//for (int i = 0; i < 7; i++)
-	//{
-	//	float x = 50.0f + (float)rand() / ((float)RAND_MAX / (m_windowBounds.Width * scale - 50.0f));
-	//	float y = 50.0f + (float)rand() / ((float)RAND_MAX / (m_windowBounds.Height * scale - 50.0f));
-
-	//	//Check the new enemy won't overlap an old one
-	//	for (iterator_enemies = enemies.begin(); iterator_enemies != enemies.end(); iterator_enemies++)
-	//	{
-	//		distX = x - (*iterator_enemies)->posX;
-	//		distY = y - (*iterator_enemies)->posY;
-
-	//		//Use ball diameter as helper value since the enemies' diameter is going to be the same
-	//		if (((distX * distX) + (distY * distY)) <= (m_player->diameter * 2) * (m_player->diameter * 2))
-	//		{
-	//			positionsOverlap = true;
-	//		}
-	//	}
-
-	//	if (!(x < goal->posX + goal->diameter && x > goal->posX - goal->diameter &&
-	//		y < goal->posY + goal->diameter && y > goal->posY - goal->diameter) &&
-	//		!(x < m_player->posX + m_player->diameter && x > m_player->posX - m_player->diameter &&
-	//		y < m_player->posY + m_player->diameter && y > m_player->posY - m_player->diameter) &&
-	//		!positionsOverlap)
-	//	{
-	//		enemies.push_back(new Enemy(x, y, &m_windowBounds));
-	//	}
-	//	else
-	//	{
-	//		i--;
-	//		positionsOverlap = false;
-	//	}
-	//}
+	// TODO: Initialize behavior/placement of enemies if you ever decide to have enemies.
 }
 
 void Renderer::movePaddles()
@@ -363,7 +321,8 @@ void Renderer::HandlePressInput(Windows::UI::Input::PointerPoint^ currentPoint)
 	switch (gameState)
 	{
 	case GameState::InGameActive:
-		movePaddles();
+		if (!onButton(pauseButton, vectorPoint))
+			movePaddles();
 		break;
 	case GameState::InGamePaused:
 		break;
@@ -414,7 +373,9 @@ bool Renderer::onButton(Sprite* button, XMFLOAT2 pointer)
 
 void Renderer::setGameRunning(bool running)
 {
-	//gameState = 
 	ball->setVelocity(XMFLOAT2(1, 0));
 	countdown->start();
 }
+
+int Renderer::getHighScore() { return highScore; }
+void Renderer::setHighScore(int newScore) { highScore = newScore; }
