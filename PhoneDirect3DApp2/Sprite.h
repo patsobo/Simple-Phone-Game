@@ -6,6 +6,7 @@
 #include "Windows.h"
 #include <list>
 #include <vector>
+#include "Spritesheet.h"
 
 using namespace DirectX;
 using namespace std;
@@ -29,12 +30,18 @@ public:
 	//Sprite(ID3D11ShaderResourceView *m_Texture, XMFLOAT2 size, XMFLOAT2 position, Windows::Foundation::Rect* movementBounds, float scale);
 	Sprite(ID3D11ShaderResourceView *m_Texture, XMFLOAT2 size, XMFLOAT2 position, Windows::Foundation::Rect* movementBounds, int rows, int columns,
 		double framesPerSecond, int dividers[]);
+	Sprite(Spritesheet* spritesheet, ID3D11ShaderResourceView *m_Texture, XMFLOAT2 position,
+		Windows::Foundation::Rect* movementBounds, float Speed, double framesPerSecond, float scale);
 
 	void Draw(SpriteBatch* spriteBatch);
 	virtual void Update(float timeTotal, float timeDelta);
 
 	bool CollidesWith(Sprite* that);
 
+	void setAnimation(int newAnim);
+	int getAnimation();
+	void setFrame(int newFrame);
+	int getNumFrames();
 	float getWidth();
 	float getHeight();
 	XMFLOAT2 getVelocity();
@@ -44,6 +51,7 @@ public:
 	void adjustPosition();
 
 private:
+	Spritesheet spritesheet;
 	XMFLOAT2 Velocity;
 	int currentFrame;
 	int animationState; //value that controls which part of the sprite sheet to animate (therefore, created sprites MUST modify this value)
@@ -54,11 +62,11 @@ private:
 	int totalFrames;
 	double timeSinceLastFrame;
 	float scale;
+	float rotation;
 
+	// TODO: Get rid of size (spritesheet handles that now)
 	Windows::Foundation::Rect* movementBounds;
 	Windows::Foundation::Rect* BoundingBox;
-	XMFLOAT2 initialPosition;	// For resetting
-	XMFLOAT2 position;
 	XMFLOAT2 size;
 
 	void NormalizeVelocity();
@@ -67,10 +75,12 @@ private:
 	double SecondsBetweenFrames();
 
 protected:
+	XMFLOAT2 initialPosition;	// For resetting
+	XMFLOAT2 position;
 	bool animationPlayedOnce;
-	int dividers[5];
 	float Speed;
 	ID3D11ShaderResourceView* m_Texture;
+	SpriteEffects spriteEffects;
 
 	bool Blocked(XMFLOAT2 newPosition);
 };

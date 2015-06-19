@@ -74,8 +74,8 @@ void Renderer::CreateWindowSizeDependentResources()
 	// Create the ball
 	size = BALL_DIM;
 	scale = .05f;
-	position = XMFLOAT2(m_windowBounds.Width  / 2 - size.x * scale / 2, m_windowBounds.Height / 2 - size.y * scale / 2);
-	speed = 500;
+	position = XMFLOAT2(m_windowBounds.Width / 2 - size.x * scale / 2, m_windowBounds.Height * 3 / 5 - size.y * scale / 2);
+	speed = 300;
 	//position = XMFLOAT2(100, 100);
 	CreateDDSTextureFromFile(m_d3dDevice.Get(), L"Assets/ball.dds", nullptr, &ballTexture, MAXSIZE_T);
 	ball = new Sprite(ballTexture, size, position, &m_windowBounds, scale, speed);
@@ -88,10 +88,31 @@ void Renderer::CreateWindowSizeDependentResources()
 	paddleBounds = m_windowBounds;
 	paddleBounds.X = m_windowBounds.Width / 15;
 	paddleBounds.Width = m_windowBounds.Width - paddleBounds.X*2;
-	position = XMFLOAT2(paddleBounds.X, m_windowBounds.Height / 2 - size.y * scale / 2);
+	position = XMFLOAT2(paddleBounds.X, m_windowBounds.Height * 3 / 5 - size.y * scale / 2);
 	paddle1 = new Sprite(paddleTexture, size, position, &paddleBounds, scale, speed);
 	position.x = paddleBounds.X + paddleBounds.Width - size.x * scale;
 	paddle2 = new Sprite(paddleTexture, size, position, &paddleBounds, scale, speed);
+
+	// Create the player
+	vector<XMFLOAT2> sizeOfPlayer(4);
+	vector<int> playerFrames(4);
+	for (int i = 0; i < 4; i++)
+	{
+		sizeOfPlayer[i] = XMFLOAT2(128.0f / 4, 192.0f / 4);
+		playerFrames[i] = 4;
+	}
+	XMFLOAT2 positionOfPlayer((m_windowBounds.Width / 4) - (sizeOfPlayer[0].x * 2/ 2), (m_windowBounds.Height * 2 / 5) - (sizeOfPlayer[0].y * 2 / 2));
+
+	CreateDDSTextureFromFile(m_d3dDevice.Get(), L"Assets/Link.dds", nullptr, &playerTexture, MAXSIZE_T);
+	playerSheet = new Spritesheet(sizeOfPlayer, 4, playerFrames, 128);
+	player = new Player(playerTexture, playerSheet, positionOfPlayer, &m_windowBounds);
+	
+	// Create the enemy
+	size = XMFLOAT2(472, 467);
+	XMFLOAT2 positionOfEnemy((m_windowBounds.Width * 3 / 4) - (size.x * .2 / 2), (m_windowBounds.Height * 2 / 5) - (size.y * .2 / 2));
+	CreateDDSTextureFromFile(m_d3dDevice.Get(), L"Assets/eds.dds", nullptr, &enemyTexture, MAXSIZE_T);
+	enemySheet = new Spritesheet(size);
+	enemy = new Enemy(enemyTexture, enemySheet, positionOfEnemy, &m_windowBounds);
 
 	countdown = new Countdown(START_TIME_MILLI, XMFLOAT2(m_windowBounds.Width / 2, m_windowBounds.Height / 5));
 
@@ -165,6 +186,8 @@ void Renderer::HandleGameplay(float timeTotal, float timeDelta)
 	ball->Update(timeTotal, timeDelta);
 	paddle1->Update(timeTotal, timeDelta);
 	paddle2->Update(timeTotal, timeDelta);
+	player->Update(timeTotal, timeDelta);
+	enemy->Update(timeTotal, timeDelta);
 
 	// Reverse direction if ball hits a paddle
 	// This entire block is essentially the collision detector
@@ -186,6 +209,7 @@ void Renderer::HandleGameplay(float timeTotal, float timeDelta)
 					return;
 				}
 			}
+			player->Attack(enemy);
 			ball->setVelocity(XMFLOAT2(1, 0));
 		}
 		else
@@ -199,6 +223,7 @@ void Renderer::HandleGameplay(float timeTotal, float timeDelta)
 					return;
 				}
 			}
+			player->Attack(enemy);
 			ball->setVelocity(XMFLOAT2(-1, 0));
 		}
 		ball->adjustPosition();	// Correction for minor collision
@@ -249,6 +274,9 @@ void Renderer::Render()
 		ball->Draw(m_spriteBatch.get());
 		paddle1->Draw(m_spriteBatch.get());
 		paddle2->Draw(m_spriteBatch.get());
+		player->Draw(m_spriteBatch.get());
+		if (!enemy->isDead())
+			enemy->Draw(m_spriteBatch.get());
 		countdown->Draw(m_spriteBatch.get(), m_spriteFont.get());
 		pauseButton->Draw(m_spriteBatch.get());
 		displayScores();
@@ -311,6 +339,8 @@ void Renderer::resetGame()
 	ball->reset();
 	paddle1->reset();
 	paddle2->reset();
+	player->reset();
+	enemy->reset();
 	countdown->resetTime();
 }
 

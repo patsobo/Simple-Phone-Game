@@ -40,6 +40,12 @@
     <Image Include="Assets\pauseButton.dds">
       <Filter>Assets</Filter>
     </Image>
+    <Image Include="Assets\Link.dds">
+      <Filter>Assets</Filter>
+    </Image>
+    <Image Include="Assets\eds.dds">
+      <Filter>Assets</Filter>
+    </Image>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="SimplePixelShader.hlsl" />
@@ -53,6 +59,10 @@
     <ClCompile Include="Sprite.cpp" />
     <ClCompile Include="Countdown.cpp" />
     <ClCompile Include="SpriteText.cpp" />
+    <ClCompile Include="Spritesheet.cpp" />
+    <ClCompile Include="Player.cpp" />
+    <ClCompile Include="Enemy.cpp" />
+    <ClCompile Include="Damageable.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="PhoneDirect3DApp2.h" />
@@ -65,6 +75,10 @@
     <ClInclude Include="Sprite.h" />
     <ClInclude Include="SpriteText.h" />
     <ClInclude Include="GameState.h" />
+    <ClInclude Include="Spritesheet.h" />
+    <ClInclude Include="Player.h" />
+    <ClInclude Include="Enemy.h" />
+    <ClInclude Include="Damageable.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\deluxe.spritefont">

@@ -26,6 +26,7 @@ void Countdown::resetTime()
 {
 	time = startTime;
 	running = false;
+	finished = false;
 }
 
 void Countdown::Update(float timeTotal, float timeDelta)
@@ -67,3 +68,4 @@ bool Countdown::isFinished()
 {
 	return finished;
 }
+bool Countdown::isRunning() { return running; }

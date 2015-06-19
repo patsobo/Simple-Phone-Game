@@ -124,6 +124,8 @@
     <Image Include="Assets\AlignmentGrid.png" />
     <Image Include="Assets\background.dds" />
     <Image Include="Assets\ball.dds" />
+    <Image Include="Assets\eds.dds" />
+    <Image Include="Assets\Link.dds" />
     <Image Include="Assets\paddle.dds" />
     <Image Include="Assets\pauseButton.dds" />
     <Image Include="Assets\Tiles\FlipCycleTileLarge.png" />
@@ -134,25 +136,33 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Countdown.h" />
+    <ClInclude Include="Damageable.h" />
+    <ClInclude Include="Enemy.h" />
     <ClInclude Include="GameState.h" />
     <ClInclude Include="PhoneDirect3DApp2.h" />
+    <ClInclude Include="Player.h" />
     <ClInclude Include="Renderer.h" />
     <ClInclude Include="DirectXHelper.h" />
     <ClInclude Include="Direct3DBase.h" />
     <ClInclude Include="BasicTimer.h" />
     <ClInclude Include="pch.h" />
     <ClInclude Include="Sprite.h" />
+    <ClInclude Include="Spritesheet.h" />
     <ClInclude Include="SpriteText.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Countdown.cpp" />
+    <ClCompile Include="Damageable.cpp" />
+    <ClCompile Include="Enemy.cpp" />
     <ClCompile Include="PhoneDirect3DApp2.cpp" />
+    <ClCompile Include="Player.cpp" />
     <ClCompile Include="Renderer.cpp" />
     <ClCompile Include="Direct3DBase.cpp" />
     <ClCompile Include="pch.cpp">
       <PrecompiledHeader>Create</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="Sprite.cpp" />
+    <ClCompile Include="Spritesheet.cpp" />
     <ClCompile Include="SpriteText.cpp" />
   </ItemGroup>
   <ItemGroup>

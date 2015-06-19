@@ -14,6 +14,8 @@
 #include "SpriteText.h"
 #include "Countdown.h"
 #include "GameState.h"
+#include "Player.h"
+#include "Enemy.h"
 
 using namespace DirectX;
 using namespace Windows::Devices::Sensors;
@@ -88,11 +90,17 @@ private:
 	ID3D11ShaderResourceView* ballTexture;
 	ID3D11ShaderResourceView* paddleTexture;
 	ID3D11ShaderResourceView* pauseButtonTexture;
+	ID3D11ShaderResourceView* playerTexture;
+	ID3D11ShaderResourceView* enemyTexture;
+	Spritesheet* playerSheet;
+	Spritesheet* enemySheet;
 	Sprite* ball;
 	Sprite* paddle1;
 	Sprite* paddle2;
 	Sprite* background;
 	Sprite* pauseButton;
+	Player* player;
+	Enemy* enemy;
 	Windows::Foundation::Rect paddleBounds;
 	Countdown* countdown;
 

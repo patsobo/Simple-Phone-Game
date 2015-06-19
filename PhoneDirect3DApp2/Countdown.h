@@ -13,6 +13,7 @@ public:
 	void setTime(float newTime);	// set new time and 
 	void resetTime();
 	bool isFinished();
+	bool isRunning();
 	void start();
 
 	void Update(float timeTotal, float timeDelta);

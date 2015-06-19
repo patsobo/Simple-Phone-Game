@@ -1,17 +1,19 @@
-﻿Build started 6/15/2015 10:46:13 PM.
+﻿Build started 6/18/2015 11:38:37 PM.
      1>Project "C:\Users\patrick\documents\visual studio 2013\Projects\PhoneDirect3DApp2\PhoneDirect3DApp2\PhoneDirect3DApp2.vcxproj" on node 2 (Build target(s)).
      1>ClCompile:
-         C:\Program Files (x86)\Microsoft Visual Studio 11.0\VC\WPSDK\WP80\bin\x86_arm\CL.exe /c /IC:\Users\patrick\Documents\DirectXTK\Inc /I"C:\Users\patrick\documents\visual studio 2013\Projects\PhoneDirect3DApp2\PhoneDirect3DApp2\\" /IARM\Debug\ /I"C:\Users\patrick\documents\visual studio 2013\Projects\PhoneDirect3DApp2\PhoneDirect3DApp2\\" /I"Generated Files\\" /IARM\Debug\ /Zi /ZW /ZW:nostdlib /nologo /W3 /WX- /sdl /MP /Od /Oy- /D PSAPI_VERSION=2 /D _UNICODE /D UNICODE /D _DEBUG /D WINAPI_FAMILY=WINAPI_FAMILY_PHONE_APP /Gm- /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Yu"pch.h" /Fp"ARM\Debug\PhoneDirect3DApp2.pch" /Fo"ARM\Debug\\" /Fd"ARM\Debug\vc110.pdb" /Gd /TP /FU"C:\Program Files (x86)\Microsoft Visual Studio 11.0\VC\WPSDK\WP80\lib\arm\platform.winmd" /FU"C:\Program Files (x86)\Windows Phone Kits\8.0\Windows Metadata\Windows.winmd" /analyze- /errorReport:prompt Renderer.cpp
-         Renderer.cpp
-     1>Renderer.cpp(96): warning C4244: 'argument' : conversion from 'const int' to 'float', possible loss of data
-     1>Renderer.cpp(217): warning C4305: 'initializing' : truncation from 'double' to 'const float'
+         C:\Program Files (x86)\Microsoft Visual Studio 11.0\VC\WPSDK\WP80\bin\x86_arm\CL.exe /c /IC:\Users\patrick\Documents\DirectXTK\Inc /I"C:\Users\patrick\documents\visual studio 2013\Projects\PhoneDirect3DApp2\PhoneDirect3DApp2\\" /IARM\Debug\ /I"C:\Users\patrick\documents\visual studio 2013\Projects\PhoneDirect3DApp2\PhoneDirect3DApp2\\" /I"Generated Files\\" /IARM\Debug\ /Zi /ZW /ZW:nostdlib /nologo /W3 /WX- /sdl /MP /Od /Oy- /D PSAPI_VERSION=2 /D _UNICODE /D UNICODE /D _DEBUG /D WINAPI_FAMILY=WINAPI_FAMILY_PHONE_APP /Gm- /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Yu"pch.h" /Fp"ARM\Debug\PhoneDirect3DApp2.pch" /Fo"ARM\Debug\\" /Fd"ARM\Debug\vc110.pdb" /Gd /TP /FU"C:\Program Files (x86)\Microsoft Visual Studio 11.0\VC\WPSDK\WP80\lib\arm\platform.winmd" /FU"C:\Program Files (x86)\Windows Phone Kits\8.0\Windows Metadata\Windows.winmd" /analyze- /errorReport:prompt Player.cpp
+         Player.cpp
        Link:
          C:\Program Files (x86)\Microsoft Visual Studio 11.0\VC\WPSDK\WP80\bin\x86_arm\link.exe /ERRORREPORT:PROMPT /OUT:"C:\Users\patrick\documents\visual studio 2013\Projects\PhoneDirect3DApp2\ARM\Debug\PhoneDirect3DApp2\PhoneDirect3DApp2.exe" /INCREMENTAL /NOLOGO d3d11.lib WindowsPhoneCore.lib RuntimeObject.lib PhoneAppModelHost.lib /NODEFAULTLIB:ole32.lib /MANIFEST:NO /DEBUG /PDB:"C:\Users\patrick\documents\visual studio 2013\Projects\PhoneDirect3DApp2\ARM\Debug\PhoneDirect3DApp2\PhoneDirect3DApp2.pdb" /SUBSYSTEM:WINDOWS /TLBID:1 /WINMD:NO /WINMDFILE:"C:\Users\patrick\documents\visual studio 2013\Projects\PhoneDirect3DApp2\ARM\Debug\PhoneDirect3DApp2\PhoneDirect3DApp2.winmd" /DYNAMICBASE /NXCOMPAT /MACHINE:ARM ARM\Debug\Countdown.obj
+         ARM\Debug\Damageable.obj
+         ARM\Debug\Enemy.obj
          ARM\Debug\PhoneDirect3DApp2.obj
+         ARM\Debug\Player.obj
          ARM\Debug\Renderer.obj
          ARM\Debug\Direct3DBase.obj
          ARM\Debug\pch.obj
          ARM\Debug\Sprite.obj
+         ARM\Debug\Spritesheet.obj
          ARM\Debug\SpriteText.obj
          C:\Users\patrick\documents\DirectXTK\Bin\WindowsPhone8\ARM\Debug\DirectXTK.lib
          PhoneDirect3DApp2.vcxproj -> C:\Users\patrick\documents\visual studio 2013\Projects\PhoneDirect3DApp2\ARM\Debug\PhoneDirect3DApp2\PhoneDirect3DApp2.exe
@@ -26,6 +28,8 @@
          Adding Assets\AlignmentGrid.png
          Adding Assets\background.dds
          Adding Assets\ball.dds
+         Adding Assets\eds.dds
+         Adding Assets\Link.dds
          Adding Assets\paddle.dds
          Adding Assets\pauseButton.dds
          Adding Assets\Tiles\FlipCycleTileLarge.png
@@ -40,4 +44,4 @@
 
 Build succeeded.
 
-Time Elapsed 00:00:05.98
+Time Elapsed 00:00:06.13

@@ -13,11 +13,7 @@ m_Texture(m_Texture), size(size), position(position), movementBounds(movementBou
 	this->scale = scale;
 	this->Speed = Speed;
 	this->initialPosition = position;
-
-	for (int i = 0; i < 5; i++)
-	{
-		this->dividers[i] = 0;
-	}
+	this->spritesheet = Spritesheet(size);
 
 	animationState = 0;
 	currentFrame = 0;
@@ -25,6 +21,8 @@ m_Texture(m_Texture), size(size), position(position), movementBounds(movementBou
 	BoundingBox = CreateBoundingBoxFromPosition(Sprite::position);
 	shouldChangeAnimation = false;
 	timeSinceLastFrame = 0;
+	rotation = 0.0f;
+	spriteEffects = SpriteEffects_None;
 }
 
 //Sprite::Sprite(ID3D11ShaderResourceView *m_Texture, XMFLOAT2 size, XMFLOAT2 position, Windows::Foundation::Rect* movementBounds, float scale) :
@@ -53,14 +51,13 @@ Sprite::Sprite(ID3D11ShaderResourceView *m_Texture, XMFLOAT2 size, XMFLOAT2 posi
 	double framesPerSecond, int dividers[])
 {
 	this->position = position;
+	this->initialPosition = position;
 	this->movementBounds = movementBounds;
 	this->rows = rows;
 	this->columns = columns;
 	this->framesPerSecond = framesPerSecond;
+	this->spritesheet = Spritesheet(size);
 	scale = 1;
-
-	for (int i = 0; i < 5; i++)
-		this->dividers[i] = dividers[i];
 
 	this->m_Texture = m_Texture;
 	this->size = size;
@@ -71,26 +68,56 @@ Sprite::Sprite(ID3D11ShaderResourceView *m_Texture, XMFLOAT2 size, XMFLOAT2 posi
 	BoundingBox = CreateBoundingBoxFromPosition(this->position);
 	shouldChangeAnimation = false;
 	timeSinceLastFrame = 0;
+	rotation = 0.0f;
+	spriteEffects = SpriteEffects_None;
+}
+
+Sprite::Sprite(Spritesheet* spritesheet, ID3D11ShaderResourceView *m_Texture, XMFLOAT2 position,
+	Windows::Foundation::Rect* movementBounds, float Speed, double framesPerSecond, float scale)
+{
+	this->position = position;
+	this->initialPosition = position;
+	this->movementBounds = movementBounds;
+	this->framesPerSecond = framesPerSecond;
+	this->spritesheet = *spritesheet;
+	this->Speed = Speed;
+	this->m_Texture = m_Texture;
+
+	currentFrame = 0;
+	this->scale = scale;
+	rotation = 0.0f;
+	BoundingBox = CreateBoundingBoxFromPosition(this->position);
+	timeSinceLastFrame = 0;
+	spriteEffects = SpriteEffects_None;
 }
 
 void Sprite::Draw(SpriteBatch* spriteBatch)
 {
-	double imageWidth = size.x / columns;
-	double imageHeight = size.y / rows;
+	//double imageWidth = size.x / columns;
+	//double imageHeight = size.y / rows;
 
-	int currentRow = currentFrame / columns;
-	int currentColumn = currentFrame%columns;
+	//int currentRow = currentFrame / columns;
+	//int currentColumn = currentFrame%columns;
+
+	//RECT* sourceRectangle = new RECT;
+	//sourceRectangle->left = imageWidth*currentColumn;
+	//sourceRectangle->top = imageHeight*currentRow;
+	//sourceRectangle->right = imageWidth*currentColumn + imageWidth;
+	//sourceRectangle->bottom = imageHeight*currentRow + imageHeight;
+
+	double imageWidth = spritesheet.currentSize.x;
+	double imageHeight = spritesheet.currentSize.y;
 
 	RECT* sourceRectangle = new RECT;
-	sourceRectangle->left = imageWidth*currentColumn;
-	sourceRectangle->top = imageHeight*currentRow;
-	sourceRectangle->right = imageWidth*currentColumn + imageWidth;
-	sourceRectangle->bottom = imageHeight*currentRow + imageHeight;
+	sourceRectangle->left = spritesheet.currentPosition.x;
+	sourceRectangle->top = spritesheet.currentPosition.y;
+	sourceRectangle->right = spritesheet.currentPosition.x + spritesheet.currentSize.x;
+	sourceRectangle->bottom = spritesheet.currentPosition.y + spritesheet.currentSize.y;
 
 	spriteBatch->Draw(m_Texture, XMFLOAT2(position.x, position.y),
-		sourceRectangle, Colors::White, 0.0f, XMFLOAT2(0.0f, 0.0f),
+		sourceRectangle, Colors::White, rotation, XMFLOAT2(0.0f, 0.0f),
 		XMFLOAT2(getWidth() / imageWidth, getHeight() / imageHeight),
-		DirectX::SpriteEffects_None, 0.0f);
+		spriteEffects, 0.0f);
 }
 
 void Sprite::Update(float timeTotal, float timeDelta)
@@ -114,43 +141,62 @@ void Sprite::UpdateAnimation(float timeTotal, float timeDelta)
 {
 	timeSinceLastFrame += timeDelta;
 
-	if (timeSinceLastFrame > SecondsBetweenFrames() && !shouldChangeAnimation)	//continue animating as normal
+	//if (timeSinceLastFrame > SecondsBetweenFrames() && !shouldChangeAnimation)	//continue animating as normal
+	//{
+	//	currentFrame++;
+	//	timeSinceLastFrame = 0;
+	//}
+
+	////else if (shouldChangeAnimation && inSecondAnimation)	//if should change out of second animation, go to first animation
+	////{
+	////	currentFrame = 0;
+	////	timeSinceLastFrame = 0;
+	////	shouldChangeAnimation = false;
+	////}
+
+	//else if (shouldChangeAnimation)	//go to specified animation
+	//{
+	//	currentFrame = dividers[animationState];
+	//	timeSinceLastFrame = 0;
+	//	shouldChangeAnimation = false;
+	//	animationPlayedOnce = false;
+	//}
+
+	////looping conditional statements
+	//if (currentFrame == dividers[animationState + 1] - 1 && dividers[animationState + 1] != 0)	//if you reach the end of your animation, loop that animation again
+	//{
+	//	currentFrame = dividers[animationState];
+	//	animationPlayedOnce = true;
+	//}
+
+	//else if (currentFrame == totalFrames)	//if at the end of sprite sheet, loop animation again
+	//{
+	//	currentFrame = dividers[animationState];
+	//	timeSinceLastFrame = 0;
+	//	animationPlayedOnce = true;
+	//}
+
+	// Continue animating as normal
+	if (timeSinceLastFrame > SecondsBetweenFrames())
 	{
 		currentFrame++;
 		timeSinceLastFrame = 0;
 	}
 
-	//else if (shouldChangeAnimation && inSecondAnimation)	//if should change out of second animation, go to first animation
-	//{
-	//	currentFrame = 0;
-	//	timeSinceLastFrame = 0;
-	//	shouldChangeAnimation = false;
-	//}
-
-	else if (shouldChangeAnimation)	//go to specified animation
+	// If you reach the end of your animation, loop that animation again
+	if (currentFrame >= spritesheet.numOfFrames[spritesheet.currentAnimation])
 	{
-		currentFrame = dividers[animationState];
-		timeSinceLastFrame = 0;
-		shouldChangeAnimation = false;
-		animationPlayedOnce = false;
-	}
-
-	//looping conditional statements
-	if (currentFrame == dividers[animationState + 1] - 1 && dividers[animationState + 1] != 0)	//if you reach the end of your animation, loop that animation again
-	{
-		currentFrame = dividers[animationState];
+		currentFrame = 0;
 		animationPlayedOnce = true;
 	}
+	//else currentFrame = 0;
 
-	else if (currentFrame == totalFrames)	//if at the end of sprite sheet, loop animation again
-	{
-		currentFrame = dividers[animationState];
-		timeSinceLastFrame = 0;
-		animationPlayedOnce = true;
-	}
+	// Update the source rectangle
+	spritesheet.Update(spritesheet.currentAnimation, currentFrame);
 }
 
-void Sprite::reset() {
+void Sprite::reset()
+{
 	position = initialPosition;
 	Velocity = XMFLOAT2(0, 0);
 }
@@ -199,9 +245,25 @@ void Sprite::adjustPosition()
 	BoundingBox = CreateBoundingBoxFromPosition(position);
 }
 
-float Sprite::getWidth() { return size.x * scale / columns; }
-float Sprite::getHeight() { return size.y * scale / rows; }
+float Sprite::getWidth() { return spritesheet.currentSize.x * scale; }
+float Sprite::getHeight() { return spritesheet.currentSize.y * scale; }
 XMFLOAT2 Sprite::getVelocity() { return Velocity; }
+void Sprite::setAnimation(int newAnim)
+{
+	spritesheet.currentAnimation = newAnim;
+	currentFrame = 0;
+	animationPlayedOnce = false;
+}
+int Sprite::getAnimation() { return spritesheet.currentAnimation; }
+void Sprite::setFrame(int newFrame)
+{
+	if (newFrame < spritesheet.numOfFrames[spritesheet.currentAnimation] && newFrame >= 0)
+		currentFrame = newFrame;
+}
+int Sprite::getNumFrames()
+{
+	return spritesheet.numOfFrames[spritesheet.currentAnimation];
+}
 void Sprite::setVelocity(XMFLOAT2 newVelocity)
 {
 	Velocity = newVelocity;
