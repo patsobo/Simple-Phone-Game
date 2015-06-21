@@ -60,7 +60,7 @@ namespace SpriteText
 		{
 			tempScore = myScore % 10;
 			num = SpriteText::numToWchar_t(tempScore);
-			stringlength = spriteFont->MeasureString(num).n128_f32;
+			stringlength = spriteFont->MeasureString(num).m128_f32;
 
 			spriteFont->DrawString(spriteBatch, num, position,
 				Colors::Black, 0.0f, XMFLOAT2(*stringlength / 2.0f, 0.0f), 1.0f, DirectX::SpriteEffects_None, 0.0f);
@@ -72,7 +72,7 @@ namespace SpriteText
 		// check if zero fill is needed
 		for (int i = zeroFill - numDigits; i > 0; i--)
 		{
-			stringlength = spriteFont->MeasureString(L"0").n128_f32;
+			stringlength = spriteFont->MeasureString(L"0").m128_f32;
 
 			spriteFont->DrawString(spriteBatch, L"0", position,
 				Colors::Black, 0.0f, XMFLOAT2(*stringlength / 2.0f, 0.0f), 1.0f, DirectX::SpriteEffects_None, 0.0f);

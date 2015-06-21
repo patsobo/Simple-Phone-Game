@@ -1,6 +1,7 @@
 #pragma once
 #include "Sprite.h"
 #include "Countdown.h"
+#include "Healthbar.h"
 //#include "Enemy.h"
 
 class Enemy;
@@ -16,11 +17,14 @@ public:
 	bool isDefending();
 	bool isDead();
 	void reset();
+	void LoadHealthbar(ID3D11Device* d3dDevice);
 
 	void Update(float timeTotal, float timeDelta);
+	void Draw(SpriteBatch* spriteBatch);
 
 private:
-	int health, totalHealth;
+	Healthbar* healthbar;
+	//int health, totalHealth;
 	int damage;
 	bool dead;
 	bool defending;

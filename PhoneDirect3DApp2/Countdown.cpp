@@ -53,8 +53,8 @@ void Countdown::Draw(SpriteBatch* spriteBatch, SpriteFont* spriteFont)
 	// Position is weird because position of individual letter is top left corner, but numbers
 	// start drawing from the least significant digit!
 	SpriteText::displayNum(spriteBatch, spriteFont, seconds, tempPosition, 2);
-	float* digitLength = spriteFont->MeasureString(L"0").n128_f32;
-	float* stringLength = spriteFont->MeasureString(L"\"").n128_f32;
+	float* digitLength = spriteFont->MeasureString(L"0").m128_f32;
+	float* stringLength = spriteFont->MeasureString(L"\"").m128_f32;
 	tempPosition.x += *digitLength / 2 + (*stringLength)/2;
 	spriteFont->DrawString(spriteBatch, L"\"", tempPosition,
 		Colors::Black, 0.0f, XMFLOAT2(*stringLength / 2.0f, 0.0f), 1.0f, DirectX::SpriteEffects_None, 0.0f);

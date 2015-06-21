@@ -7,8 +7,11 @@ Player::Player(ID3D11ShaderResourceView *m_Texture, Spritesheet* spritesheet, XM
 {
 	countdown = new Countdown(700, XMFLOAT2(0, 0));	// position doesn't matter
 	defending = false;
-	totalHealth = 80;
-	health = totalHealth;
+	//totalHealth = 80;
+	XMFLOAT2 healthbarPosition = position;
+	healthbarPosition.y -= 35;
+	healthbar = new Healthbar(healthbarPosition, 80);
+	//health = totalHealth;
 	damage = 10;
 	dead = false;
 }
@@ -29,6 +32,13 @@ void Player::Update(float timeTotal, float timeDelta)
 	// If statement allows for pause on last frame if attacking (looks better than looping)
 	if (!(animationPlayedOnce && getAnimation() == 1))
 		Sprite::Update(timeTotal, timeDelta);
+	healthbar->Update(position);
+}
+
+void Player::Draw(SpriteBatch* spriteBatch)
+{
+	healthbar->Draw(spriteBatch);
+	Sprite::Draw(spriteBatch);
 }
 
 void Player::Attack(Enemy* enemy)
@@ -45,15 +55,22 @@ void Player::Attack(Enemy* enemy)
 
 void Player::decreaseHealth(int delta)
 {
-	health -= delta;
-	if (health <= 0)
-		dead = true;
+	// TODO: Add healthbar
+	healthbar->decreaseHealth(delta);
+	//health -= delta;
+	dead = healthbar->hasNoHealth();
 }
 
 void Player::reset()
 {
-	health = totalHealth;
+	healthbar->reset();
+	//health = totalHealth;
 	dead = false;
+}
+
+void Player::LoadHealthbar(ID3D11Device* d3dDevice)
+{
+	healthbar->LoadTexture(d3dDevice);
 }
 
 bool Player::isDefending() { return defending; }

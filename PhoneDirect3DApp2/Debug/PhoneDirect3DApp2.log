@@ -1,18 +1,25 @@
-﻿Build started 6/15/2015 9:46:41 PM.
+﻿Build started 6/20/2015 10:21:02 PM.
      1>Project "C:\Users\patrick\documents\visual studio 2013\Projects\PhoneDirect3DApp2\PhoneDirect3DApp2\PhoneDirect3DApp2.vcxproj" on node 2 (Build target(s)).
      1>ClCompile:
-         C:\Program Files (x86)\Microsoft Visual Studio 11.0\VC\WPSDK\WP80\bin\CL.exe /c /IC:\Users\patrick\Documents\DirectXTK\Inc /I"C:\Users\patrick\documents\visual studio 2013\Projects\PhoneDirect3DApp2\PhoneDirect3DApp2\\" /IDebug\ /I"C:\Users\patrick\documents\visual studio 2013\Projects\PhoneDirect3DApp2\PhoneDirect3DApp2\\" /I"Generated Files\\" /IDebug\ /ZI /ZW /ZW:nostdlib /nologo /W3 /WX- /sdl /MP /Od /Oy- /D PSAPI_VERSION=2 /D _UNICODE /D UNICODE /D _DEBUG /D WINAPI_FAMILY=WINAPI_FAMILY_PHONE_APP /Gm- /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Yu"pch.h" /Fp"Debug\PhoneDirect3DApp2.pch" /Fo"Debug\\" /Fd"Debug\vc110.pdb" /Gd /TP /FU"C:\Program Files (x86)\Microsoft Visual Studio 11.0\VC\WPSDK\WP80\lib\platform.winmd" /FU"C:\Program Files (x86)\Windows Phone Kits\8.0\Windows Metadata\Windows.winmd" /analyze- /errorReport:prompt PhoneDirect3DApp2.cpp Renderer.cpp
-         PhoneDirect3DApp2.cpp
-         Renderer.cpp
-     1>c:\users\patrick\documents\visual studio 2013\projects\phonedirect3dapp2\phonedirect3dapp2\renderer.cpp(96): warning C4244: 'argument' : conversion from 'const int' to 'float', possible loss of data
-     1>c:\users\patrick\documents\visual studio 2013\projects\phonedirect3dapp2\phonedirect3dapp2\renderer.cpp(217): warning C4305: 'initializing' : truncation from 'double' to 'const float'
+         C:\Program Files (x86)\Microsoft Visual Studio 11.0\VC\WPSDK\WP80\bin\CL.exe /c /IC:\Users\patrick\Documents\DirectXTK\Inc /I"C:\Users\patrick\documents\visual studio 2013\Projects\PhoneDirect3DApp2\PhoneDirect3DApp2\\" /IDebug\ /I"C:\Users\patrick\documents\visual studio 2013\Projects\PhoneDirect3DApp2\PhoneDirect3DApp2\\" /I"Generated Files\\" /IDebug\ /ZI /ZW /ZW:nostdlib /nologo /W3 /WX- /sdl /MP /Od /Oy- /D PSAPI_VERSION=2 /D _UNICODE /D UNICODE /D _DEBUG /D WINAPI_FAMILY=WINAPI_FAMILY_PHONE_APP /Gm- /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Yu"pch.h" /Fp"Debug\PhoneDirect3DApp2.pch" /Fo"Debug\\" /Fd"Debug\vc110.pdb" /Gd /TP /FU"C:\Program Files (x86)\Microsoft Visual Studio 11.0\VC\WPSDK\WP80\lib\platform.winmd" /FU"C:\Program Files (x86)\Windows Phone Kits\8.0\Windows Metadata\Windows.winmd" /analyze- /errorReport:prompt Enemy.cpp
+         Enemy.cpp
+     1>c:\users\patrick\documents\visual studio 2013\projects\phonedirect3dapp2\phonedirect3dapp2\enemy.cpp(7): warning C4305: 'argument' : truncation from 'double' to 'float'
+     1>c:\users\patrick\documents\visual studio 2013\projects\phonedirect3dapp2\phonedirect3dapp2\enemy.cpp(10): warning C4244: 'argument' : conversion from 'int' to 'float', possible loss of data
+     1>c:\users\patrick\documents\visual studio 2013\projects\phonedirect3dapp2\phonedirect3dapp2\enemy.cpp(11): warning C4244: 'argument' : conversion from 'int' to 'float', possible loss of data
+     1>c:\users\patrick\documents\visual studio 2013\projects\phonedirect3dapp2\phonedirect3dapp2\enemy.cpp(78): warning C4244: 'argument' : conversion from 'int' to 'float', possible loss of data
+     1>c:\users\patrick\documents\visual studio 2013\projects\phonedirect3dapp2\phonedirect3dapp2\enemy.cpp(79): warning C4244: 'argument' : conversion from 'int' to 'float', possible loss of data
        Link:
          C:\Program Files (x86)\Microsoft Visual Studio 11.0\VC\WPSDK\WP80\bin\link.exe /ERRORREPORT:PROMPT /OUT:"C:\Users\patrick\documents\visual studio 2013\Projects\PhoneDirect3DApp2\Debug\PhoneDirect3DApp2\PhoneDirect3DApp2.exe" /INCREMENTAL /NOLOGO d3d11.lib WindowsPhoneCore.lib RuntimeObject.lib PhoneAppModelHost.lib /NODEFAULTLIB:ole32.lib /MANIFEST:NO /DEBUG /PDB:"C:\Users\patrick\documents\visual studio 2013\Projects\PhoneDirect3DApp2\Debug\PhoneDirect3DApp2\PhoneDirect3DApp2.pdb" /SUBSYSTEM:WINDOWS /TLBID:1 /WINMD:NO /WINMDFILE:"C:\Users\patrick\documents\visual studio 2013\Projects\PhoneDirect3DApp2\Debug\PhoneDirect3DApp2\PhoneDirect3DApp2.winmd" /DYNAMICBASE /NXCOMPAT /MACHINE:X86 Debug\Countdown.obj
+         Debug\Damageable.obj
+         Debug\Enemy.obj
+         Debug\Healthbar.obj
          Debug\PhoneDirect3DApp2.obj
+         Debug\Player.obj
          Debug\Renderer.obj
          Debug\Direct3DBase.obj
          Debug\pch.obj
          Debug\Sprite.obj
+         Debug\Spritesheet.obj
          Debug\SpriteText.obj
          C:\Users\patrick\documents\DirectXTK\Bin\WindowsPhone8\Win32\Debug\DirectXTK.lib
          PhoneDirect3DApp2.vcxproj -> C:\Users\patrick\documents\visual studio 2013\Projects\PhoneDirect3DApp2\Debug\PhoneDirect3DApp2\PhoneDirect3DApp2.exe
@@ -27,6 +34,10 @@
          Adding Assets\AlignmentGrid.png
          Adding Assets\background.dds
          Adding Assets\ball.dds
+         Adding Assets\eds.dds
+         Adding Assets\healthbar.dds
+         Adding Assets\healthbar2.dds
+         Adding Assets\Link.dds
          Adding Assets\paddle.dds
          Adding Assets\pauseButton.dds
          Adding Assets\Tiles\FlipCycleTileLarge.png
@@ -41,4 +52,4 @@
 
 Build succeeded.
 
-Time Elapsed 00:00:08.12
+Time Elapsed 00:00:04.89

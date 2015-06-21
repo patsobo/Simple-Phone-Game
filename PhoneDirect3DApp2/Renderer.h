@@ -25,7 +25,7 @@ const XMFLOAT2 PAUSE_DIM = XMFLOAT2(32, 38);
 const XMFLOAT2 BGD_DIM = XMFLOAT2(768, 1152);
 const XMFLOAT2 PADDLE_DIM = XMFLOAT2(178, 401);
 const XMFLOAT2 BALL_DIM = XMFLOAT2(500, 500);
-const int START_TIME_MILLI = 15000;
+const int START_TIME_MILLI = 60000;
 
 ref class Renderer sealed : public Direct3DBase
 {

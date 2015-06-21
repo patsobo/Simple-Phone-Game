@@ -46,6 +46,12 @@
     <Image Include="Assets\eds.dds">
       <Filter>Assets</Filter>
     </Image>
+    <Image Include="Assets\healthbar.dds">
+      <Filter>Assets</Filter>
+    </Image>
+    <Image Include="Assets\healthbar2.dds">
+      <Filter>Assets</Filter>
+    </Image>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="SimplePixelShader.hlsl" />
@@ -63,6 +69,7 @@
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="Enemy.cpp" />
     <ClCompile Include="Damageable.cpp" />
+    <ClCompile Include="Healthbar.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="PhoneDirect3DApp2.h" />
@@ -79,6 +86,7 @@
     <ClInclude Include="Player.h" />
     <ClInclude Include="Enemy.h" />
     <ClInclude Include="Damageable.h" />
+    <ClInclude Include="Healthbar.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\deluxe.spritefont">

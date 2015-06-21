@@ -75,7 +75,7 @@ void Renderer::CreateWindowSizeDependentResources()
 	size = BALL_DIM;
 	scale = .05f;
 	position = XMFLOAT2(m_windowBounds.Width / 2 - size.x * scale / 2, m_windowBounds.Height * 3 / 5 - size.y * scale / 2);
-	speed = 300;
+	speed = 250;
 	//position = XMFLOAT2(100, 100);
 	CreateDDSTextureFromFile(m_d3dDevice.Get(), L"Assets/ball.dds", nullptr, &ballTexture, MAXSIZE_T);
 	ball = new Sprite(ballTexture, size, position, &m_windowBounds, scale, speed);
@@ -84,7 +84,7 @@ void Renderer::CreateWindowSizeDependentResources()
 	CreateDDSTextureFromFile(m_d3dDevice.Get(), L"Assets/paddle.dds", nullptr, &paddleTexture, MAXSIZE_T);
 	size = PADDLE_DIM;
 	scale = .4f;
-	speed = 200;
+	speed = 150;
 	paddleBounds = m_windowBounds;
 	paddleBounds.X = m_windowBounds.Width / 15;
 	paddleBounds.Width = m_windowBounds.Width - paddleBounds.X*2;
@@ -106,6 +106,7 @@ void Renderer::CreateWindowSizeDependentResources()
 	CreateDDSTextureFromFile(m_d3dDevice.Get(), L"Assets/Link.dds", nullptr, &playerTexture, MAXSIZE_T);
 	playerSheet = new Spritesheet(sizeOfPlayer, 4, playerFrames, 128);
 	player = new Player(playerTexture, playerSheet, positionOfPlayer, &m_windowBounds);
+	player->LoadHealthbar(m_d3dDevice.Get());
 	
 	// Create the enemy
 	size = XMFLOAT2(472, 467);
@@ -113,6 +114,7 @@ void Renderer::CreateWindowSizeDependentResources()
 	CreateDDSTextureFromFile(m_d3dDevice.Get(), L"Assets/eds.dds", nullptr, &enemyTexture, MAXSIZE_T);
 	enemySheet = new Spritesheet(size);
 	enemy = new Enemy(enemyTexture, enemySheet, positionOfEnemy, &m_windowBounds);
+	enemy->LoadHealthbar(m_d3dDevice.Get());
 
 	countdown = new Countdown(START_TIME_MILLI, XMFLOAT2(m_windowBounds.Width / 2, m_windowBounds.Height / 5));
 
@@ -189,6 +191,12 @@ void Renderer::HandleGameplay(float timeTotal, float timeDelta)
 	player->Update(timeTotal, timeDelta);
 	enemy->Update(timeTotal, timeDelta);
 
+	if (enemy->isDead())
+	{
+		addToScore(1);
+		enemy->reset();
+	}
+
 	// Reverse direction if ball hits a paddle
 	// This entire block is essentially the collision detector
 	if (ball->CollidesWith(paddle1) || ball->CollidesWith(paddle2))
@@ -227,7 +235,7 @@ void Renderer::HandleGameplay(float timeTotal, float timeDelta)
 			ball->setVelocity(XMFLOAT2(-1, 0));
 		}
 		ball->adjustPosition();	// Correction for minor collision
-		addToScore(1);
+		//addToScore(1);
 	}
 
 	// Check if countdown is over
@@ -263,7 +271,7 @@ void Renderer::Render()
 	background->Draw(m_spriteBatch.get());
 	if (gameState == GameState::Initial)
 	{
-		float* stringlength = m_spriteFont->MeasureString(L"Tap to start!").n128_f32;
+		float* stringlength = m_spriteFont->MeasureString(L"Tap to start!").m128_f32;
 
 		m_spriteFont->DrawString(m_spriteBatch.get(), L"Tap to start!",
 			XMFLOAT2(m_windowBounds.Width / 2.0f, m_windowBounds.Height / (5.0f / 2.0f)),
@@ -307,9 +315,9 @@ void Renderer::displayScores()
 	if (score > highScore)
 		highScore = score;
 
-	float* digitLength = m_spriteFont->MeasureString(L"0").n128_f32;
+	float* digitLength = m_spriteFont->MeasureString(L"0").m128_f32;
 	XMFLOAT2 position = XMFLOAT2(m_windowBounds.Width - m_windowBounds.Width / 20.0f, m_windowBounds.Height / 20.0f + pauseButton->getHeight() + 20);	// replace 10 with variable
-	float *stringlength = m_spriteFont->MeasureString(L"Score").n128_f32;
+	float *stringlength = m_spriteFont->MeasureString(L"Score").m128_f32;
 	m_spriteFont->DrawString(m_spriteBatch.get(), L"Score",
 		position, Colors::Black, 0.0f, XMFLOAT2(*stringlength, 0.0f), 1.0f, DirectX::SpriteEffects_None, 0.0f);
 

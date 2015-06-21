@@ -125,6 +125,8 @@
     <Image Include="Assets\background.dds" />
     <Image Include="Assets\ball.dds" />
     <Image Include="Assets\eds.dds" />
+    <Image Include="Assets\healthbar.dds" />
+    <Image Include="Assets\healthbar2.dds" />
     <Image Include="Assets\Link.dds" />
     <Image Include="Assets\paddle.dds" />
     <Image Include="Assets\pauseButton.dds" />
@@ -139,6 +141,7 @@
     <ClInclude Include="Damageable.h" />
     <ClInclude Include="Enemy.h" />
     <ClInclude Include="GameState.h" />
+    <ClInclude Include="Healthbar.h" />
     <ClInclude Include="PhoneDirect3DApp2.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="Renderer.h" />
@@ -154,6 +157,7 @@
     <ClCompile Include="Countdown.cpp" />
     <ClCompile Include="Damageable.cpp" />
     <ClCompile Include="Enemy.cpp" />
+    <ClCompile Include="Healthbar.cpp" />
     <ClCompile Include="PhoneDirect3DApp2.cpp" />
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="Renderer.cpp" />

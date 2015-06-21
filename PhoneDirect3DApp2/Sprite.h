@@ -33,7 +33,7 @@ public:
 	Sprite(Spritesheet* spritesheet, ID3D11ShaderResourceView *m_Texture, XMFLOAT2 position,
 		Windows::Foundation::Rect* movementBounds, float Speed, double framesPerSecond, float scale);
 
-	void Draw(SpriteBatch* spriteBatch);
+	virtual void Draw(SpriteBatch* spriteBatch);
 	virtual void Update(float timeTotal, float timeDelta);
 
 	bool CollidesWith(Sprite* that);
